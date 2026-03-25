@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Complaint - Municipal Corporation</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>🏛️ Municipal Corp</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="userName" class="user-name"></span>
+                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li class="active"><a href="create-ticket.html">➕ New Complaint</a></li>
+                <li><a href="my-tickets.html">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: block;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html">👤 Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <h1>📝 File New Complaint</h1>
+                    <p>Report an issue in your area</p>
+                </div>
+
+                <form id="ticketForm" class="ticket-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Complaint Type *</label>
+                            <select id="type" required>
+                                <option value="COMPLAINT">Complaint</option>
+                                <option value="FEEDBACK">Service Request</option>
+                                <option value="SUGGESTION">Suggestion</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="category" required>
+                                <option value="">Select Category</option>
+                                <option value="STREET_LIGHTS">🔦 Street Lights</option>
+                                <option value="ROADS">🛣️ Roads & Potholes</option>
+                                <option value="WATER_SUPPLY">💧 Water Supply</option>
+                                <option value="GARBAGE_COLLECTION">🗑️ Garbage Collection</option>
+                                <option value="DRAINAGE">🚰 Sewage & Drainage</option>
+                                <option value="PARKS">🌳 Parks & Gardens</option>
+                                <option value="OTHER">📋 Others</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" id="title" placeholder="Brief description of the issue" 
+                               maxlength="100" required>
+                        <small class="char-count">0/100 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea id="description" rows="5" 
+                                  placeholder="Provide detailed information about the issue..." 
+                                  maxlength="500" required></textarea>
+                        <small class="char-count">0/500 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Photos (Optional)</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif" 
+                                   multiple style="display: none;">
+                            <div class="upload-prompt" onclick="document.getElementById('fileInput').click()">
+                                <div class="upload-icon">📷</div>
+                                <p>Click to upload photos</p>
+                                <small>JPEG, PNG, GIF (Max 10MB each)</small>
+                            </div>
+                            <div id="previewContainer" class="preview-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="window.location.href='dashboard.html'" 
+                                class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            Submit Complaint
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/create-ticket.js"></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details - Municipal Corporation</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Image Viewer Modal */
+        .image-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-viewer-modal.active {
+            display: flex;
+        }
+
+        .image-viewer-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .image-viewer-content img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 90vh;
+            display: block;
+        }
+
+        .image-viewer-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-viewer-close:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>🏛️ Municipal Corp</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="userName" class="user-name"></span>
+                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li id="newComplaintLink"><a href="create-ticket.html">➕ New Complaint</a></li>
+                <li class="active"><a href="my-tickets.html">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html">👤 Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="ticket-details-container">
+                <!-- Back Button -->
+                <button onclick="window.location.href='my-tickets.html'" class="btn btn-secondary btn-sm">
+                    ← Back to Tickets
+                </button>
+
+                <!-- Ticket Header -->
+                <div id="ticketHeader" class="ticket-header">
+                    <!-- Will be populated by JS -->
+                </div>
+
+                <!-- Ticket Images -->
+                <div id="ticketImages" class="ticket-images">
+                    <!-- Will be populated if images exist -->
+                </div>
+
+                <!-- Ticket Details -->
+                <div id="ticketInfo" class="ticket-info">
+                    <!-- Will be populated by JS -->
+                </div>
+
+                <!-- Leader Actions (visible only to leaders) -->
+                <div id="leaderActions" class="section" style="display: none;">
+                    <h3>⚙️ Leader Actions</h3>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                        <button onclick="updateStatus('IN_PROGRESS')" class="btn btn-warning btn-sm">
+                            ⏳ Mark In Progress
+                        </button>
+                        <button onclick="updateStatus('RESOLVED')" class="btn btn-success btn-sm">
+                            ✅ Mark Resolved
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section">
+                    <h3>💬 Comments & Updates</h3>
+                    <div id="commentsContainer" class="comments-container">
+                        <!-- Will be populated by JS -->
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <div class="add-comment-form">
+                        <h4>Add a Comment</h4>
+                        <form id="commentForm">
+                            <textarea id="commentText" rows="3" 
+                                      placeholder="Add your comment or update..." 
+                                      required></textarea>
+                            <button type="submit" class="btn btn-primary">Post Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer"></div>
+
+    <!-- Image Viewer Modal -->
+    <div id="imageViewerModal" class="image-viewer-modal" onclick="closeImageViewer()">
+        <div class="image-viewer-content" onclick="event.stopPropagation()">
+            <button class="image-viewer-close" onclick="closeImageViewer()">✕</button>
+            <img id="viewerImage" src="" alt="Image">
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/ticket-details.js?v=3"></script>
+</body>
+</html>

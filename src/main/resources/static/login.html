@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Municipal Corporation</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h1>🏛️ Municipal Corp</h1>
+                <p>Login or Register</p>
+            </div>
+
+            <!-- Step 1: Phone Number -->
+            <div id="phoneStep" class="auth-step active">
+                <h2>Enter Your Phone Number</h2>
+                <form id="phoneForm">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="phone" pattern="[0-9]{10}" maxlength="10" 
+                               placeholder="Enter 10-digit mobile number" required>
+                        <small>We'll send you an OTP to verify</small>
+                    </div>
+                    <div class="form-group">
+                        <label>I am a</label>
+                        <select id="role" required>
+                            <option value="CITIZEN">Citizen</option>
+                            <option value="LEADER">Ward Officer</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send OTP</button>
+                </form>
+            </div>
+
+            <!-- Step 2: OTP Verification -->
+            <div id="otpStep" class="auth-step">
+                <h2>Enter OTP</h2>
+                <p class="info-text">OTP sent to <span id="phoneDisplay"></span></p>
+                <form id="otpForm">
+                    <div class="form-group">
+                        <label>OTP Code</label>
+                        <input type="text" id="otp" maxlength="6" pattern="[0-9]{6}" 
+                               placeholder="Enter 6-digit OTP" required>
+                        <small>Valid for 5 minutes</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Verify OTP</button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="goBackToPhone()">
+                        Back
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 3: Registration Form -->
+            <div id="registerStep" class="auth-step">
+                <h2>Complete Registration</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <textarea id="address" rows="3" placeholder="Enter your complete address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label id="wardLabel">Ward Number *</label>
+                        <input type="text" id="wardNumber" placeholder="e.g., 15" required>
+                    </div>
+                    <div class="form-group" id="leaderSelectGroup">
+                        <label>Ward Officer *</label>
+                        <select id="leaderId" required>
+                            <option value="">Select...</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Complete Registration</button>
+                </form>
+            </div>
+
+            <div class="auth-footer">
+                <a href="index.html">← Back to Home</a>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertContainer"></div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

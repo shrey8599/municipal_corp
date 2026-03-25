@@ -1,0 +1,9 @@
+target/
+!target/*.jar
+.git
+.gitignore
+.vscode
+.github
+*.md
+.DS_Store
+*.log

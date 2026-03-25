@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Municipal Corp</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .profile-pic-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .change-pic-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 18px;
+        }
+
+        .change-pic-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .profile-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .profile-card-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .field-row {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .field-row:last-child {
+            border-bottom: none;
+        }
+
+        .field-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: #666;
+            min-width: 150px;
+            font-size: 14px;
+        }
+
+        .field-value {
+            flex: 1;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .btn-icon-edit {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-icon-edit:hover {
+            background: #667eea;
+            transform: scale(1.1);
+        }
+
+        .read-only-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .field-edit {
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .field-edit .field-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .field-edit input,
+        .field-edit textarea {
+            font-family: inherit;
+            margin-bottom: 10px;
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .field-actions .btn {
+            flex: 1;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .btn-block {
+            width: 100%;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 10px;
+            }
+
+            .field-display {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .field-label {
+                min-width: auto;
+            }
+
+            .field-actions {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                🏛️ Municipal Corp
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard.html">Dashboard</a>
+                <a href="/profile.html" class="active">Profile</a>
+                <a href="/contact-leader.html">Contact Ward Officer</a>
+                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alert Container -->
+    <div id="alertContainer" style="position: fixed; top: 80px; right: 20px; z-index: 9999;"></div>
+
+    <div class="container">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-pic-container">
+                    <img id="profilePic" src="/images/default-avatar.png" alt="Profile Picture" class="profile-pic">
+                    <button class="change-pic-btn" onclick="document.getElementById('profilePicInput').click()">
+                        📷
+                    </button>
+                    <input type="file" id="profilePicInput" accept="image/*" style="display:none;">
+                </div>
+                <h1 id="userName">Loading...</h1>
+                <p id="userRole" style="opacity: 0.9; margin: 5px 0 0 0;"></p>
+            </div>
+
+            <!-- Profile Information Card -->
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <h3>📋 Personal Information</h3>
+                </div>
+                
+                <div id="profileFields">
+                    <!-- Fields will be dynamically generated here -->
+                    <div class="field-row">
+                        <div style="text-align: center; color: #999; padding: 40px 0;">
+                            Loading profile...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Text -->
+            <div class="profile-card" style="margin-top: 20px; background: #f8f9fa; border: 1px solid #e9ecef;">
+                <h4 style="margin-top: 0; color: #666;">💡 How to Update Your Profile</h4>
+                <ul style="color: #666; line-height: 1.8;">
+                    <li>Click the ✏️ icon next to any field to edit it</li>
+                    <li>For <strong>Phone</strong> and <strong>Email</strong> changes, you'll need to verify with OTP for security</li>
+                    <li>Other fields can be updated immediately</li>
+                    <li>Ward Number cannot be changed (assigned by admin)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/profile.js"></script>
+    <script>
+        // Update header with user info
+        const user = getUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.name || 'User';
+            document.getElementById('userRole').textContent = user.role === 'LEADER' ? '👤 Ward Officer' : '👤 Citizen';
+        }
+    </script>
+</body>
+</html>

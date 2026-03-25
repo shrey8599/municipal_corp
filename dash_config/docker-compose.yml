@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  municipal-corp:
+    build:
+      context: ..
+      dockerfile: dash_config/Dockerfile
+    container_name: municipal-corp-app
+    ports:
+      - "9999:9999"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    restart: unless-stopped
+    networks:
+      - municipal-network
+
+networks:
+  municipal-network:
+    driver: bridge

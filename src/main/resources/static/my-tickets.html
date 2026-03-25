@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints - Municipal Corporation</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>🏛️ Municipal Corp</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="userName" class="user-name"></span>
+                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li id="newComplaintLink"><a href="create-ticket.html">➕ New Complaint</a></li>
+                <li class="active"><a href="my-tickets.html">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html">👤 Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Dashboard Stats -->
+            <div class="dashboard-header">
+                <h1>My Complaints</h1>
+                <a href="create-ticket.html" class="btn btn-primary" id="fileNewBtn">
+                    ➕ File New Complaint
+                </a>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-icon open">📝</div>
+                    <div class="stat-content">
+                        <h3 id="openCount">0</h3>
+                        <p>Open Complaints</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon progress">⏳</div>
+                    <div class="stat-content">
+                        <h3 id="inProgressCount">0</h3>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon resolved">✅</div>
+                    <div class="stat-content">
+                        <h3 id="resolvedCount">0</h3>
+                        <p>Resolved</p>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon total">📊</div>
+                    <div class="stat-content">
+                        <h3 id="totalCount">0</h3>
+                        <p>Total Complaints</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tickets List -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 id="sectionTitle">Recent Complaints</h2>
+                    <button onclick="loadTickets()" class="btn btn-secondary btn-sm">🔄 Refresh</button>
+                </div>
+                <div id="ticketsContainer" class="tickets-container">
+                    <div class="loading">Loading complaints...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/my-tickets.js?v=4"></script>
+</body>
+</html>

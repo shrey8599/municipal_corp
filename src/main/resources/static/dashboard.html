@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Municipal Corporation</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .leader-profile-section {
+            background: linear-gradient(135deg, #D97642 0%, #2A9D8F 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(217, 118, 66, 0.15);
+        }
+        
+        .leader-profile-content {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .leader-profile-pic {
+            min-width: 280px;
+            max-width: 380px;
+            min-height: 320px;
+            max-height: 420px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 6px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+        
+        .leader-profile-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .leader-profile-info h1 {
+            font-size: 2.5em;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .leader-profile-info p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+        
+        .vision-statement {
+            background: rgba(255,255,255,0.15);
+            padding: 24px;
+            border-radius: 10px;
+            margin-top: 24px;
+            border-left: 5px solid rgba(255,255,255,0.6);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .vision-statement h3 {
+            margin: 0 0 12px 0;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        
+        .vision-statement p {
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+        
+        .vision-statement strong {
+            display: block;
+            font-size: 1.15em;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        
+        .news-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 20px 0;
+        }
+        
+        .news-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(217, 118, 66, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid #E8D5C4;
+        }
+        
+        .news-card:hover {
+            box-shadow: 0 8px 24px rgba(217, 118, 66, 0.12);
+            transform: translateY(-2px);
+            border-color: #C9A961;
+        }
+        
+        .news-images-container {
+            width: 100%;
+            height: 300px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            gap: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #f0f0f0;
+        }
+        
+        .news-images-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .news-images-container::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        
+        .news-images-container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        .news-images-container::-webkit-scrollbar-thumb:hover {
+            background: #0056b3;
+        }
+        
+        .news-image {
+            height: 300px;
+            width: auto;
+            max-width: none;
+            object-fit: contain;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        
+        .news-content {
+            padding: 24px;
+        }
+        
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+        
+        .news-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0 0 12px 0;
+        }
+        
+        .news-text {
+            color: var(--text-color);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        .news-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 2px solid #E8D5C4;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .like-btn:hover {
+            background: #FFF8F0;
+            border-color: #D97642;
+            transform: translateY(-1px);
+        }
+        
+        .like-btn.liked {
+            background: #FFF8F0;
+            border-color: #D97642;
+            color: #D97642;
+        }
+            transition: all 0.2s ease;
+            font-size: 1em;
+        }
+        
+        .like-btn:hover {
+            background: #f8f9fa;
+        }
+        
+        .like-btn.liked {
+            background: #e3f2fd;
+            border-color: #2196F3;
+            color: #2196F3;
+        }
+        
+        .like-btn.liked:hover {
+            background: #bbdefb;
+        }
+        
+        .add-news-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .add-news-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 3px solid #E8D5C4;
+            box-shadow: 0 8px 32px rgba(217, 118, 66, 0.15);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #D97642;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #8D6E63;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #D97642;
+            transform: rotate(90deg);
+        }
+        
+        /* Image viewer modal */
+        .image-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-viewer-modal.active {
+            display: flex;
+        }
+        
+        .image-viewer-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+        
+        .image-viewer-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .image-viewer-close {
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+        
+        .image-viewer-close:hover {
+            transform: scale(1.1);
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>🏛️ Municipal Corp</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="userName" class="user-name"></span>
+                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="active"><a href="dashboard.html">📊 Dashboard</a></li>
+                <li id="newComplaintLink"><a href="create-ticket.html">➕ New Complaint</a></li>
+                <li id="myComplaintsLink"><a href="my-tickets.html">📋 My Complaints</a></li>
+                <li id="contactLeaderLink"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html">👤 Profile</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- Ward Officer Profile Section -->
+            <div id="leaderProfileSection" class="leader-profile-section" style="display: none;">
+                <div class="leader-profile-content">
+                    <img id="leaderProfilePic" src="/images/default-avatar.svg" alt="Ward Officer" class="leader-profile-pic">
+                    <div class="leader-profile-info">
+                        <h1 id="leaderName">Ward Officer</h1>
+                        <p id="leaderDesignation"></p>
+                        <p><strong>📍 Ward Number:</strong> <span id="leaderJurisdiction"></span></p>
+                        <p><strong>📱 Phone:</strong> <span id="leaderPhone"></span></p>
+                        
+                        <div class="vision-statement">
+                            <h3>🎯 Our Mission & Vision</h3>
+                            <p><strong>"Serving with dedication, building tomorrow together."</strong></p>
+                            <p>We are committed to creating a cleaner, safer, and more prosperous community for all residents. Through transparent governance, swift problem resolution, and continuous infrastructure development, we aim to make our ward the best place to live, work, and grow. Your voice matters, your concerns are our priority, and together we build a brighter future.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News & Announcements Section -->
+            <div>
+                <div class="news-section-header">
+                    <h2>📰 News & Announcements</h2>
+                    <button id="addNewsBtn" class="btn btn-primary btn-add-news" style="display: none;" onclick="showAddNewsModal()">
+                        <span style="font-size: 1.5em; margin-right: 8px;">➕</span>
+                        <span style="font-weight: 600; font-size: 1.1em;">Add News</span>
+                    </button>
+                </div>
+                
+                <div id="newsContainer">
+                    <div class="loading">Loading news...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add News Modal -->
+    <div id="addNewsModal" class="add-news-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add News/Announcement</h2>
+                <button class="close-modal" onclick="closeAddNewsModal()">✕</button>
+            </div>
+            
+            <form id="addNewsForm" onsubmit="submitNews(event)">
+                <div class="form-group">
+                    <label for="newsTitle">Title *</label>
+                    <input type="text" id="newsTitle" class="form-control" required maxlength="200">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newsContent">Content *</label>
+                    <textarea id="newsContent" class="form-control" rows="6" required maxlength="2000"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newsImages">Images (optional - multiple allowed)</label>
+                    <input type="file" id="newsImages" accept="image/jpeg,image/jpg,image/png" class="form-control" multiple>
+                    <small class="form-text text-muted">You can select multiple images. Hold Ctrl/Cmd to select multiple files.</small>
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" onclick="closeAddNewsModal()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Publish News</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer"></div>
+
+    <!-- Image Viewer Modal -->
+    <div id="imageViewerModal" class="image-viewer-modal" onclick="closeImageViewer()">
+        <div class="image-viewer-content" onclick="event.stopPropagation()">
+            <button class="image-viewer-close" onclick="closeImageViewer()">✕</button>
+            <img id="viewerImage" src="" alt="Image">
+        </div>
+    </div>
+
+    <!-- Inline script to handle menu visibility IMMEDIATELY - NO CACHE -->
+    <script>
+        (function() {
+            // Get user from localStorage immediately
+            const userStr = localStorage.getItem('municipal_user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    console.log('🔍 User role detected:', user.role);
+                    
+                    if (user.role === 'LEADER') {
+                        console.log('🔧 LEADER detected - hiding citizen-only menu items');
+                        
+                        // Hide New Complaint
+                        const newComplaintLink = document.getElementById('newComplaintLink');
+                        if (newComplaintLink) {
+                            newComplaintLink.remove(); // Completely remove from DOM
+                            console.log('✅ Removed New Complaint link');
+                        }
+                        
+                        // Hide Contact Ward Officer
+                        const contactLink = document.getElementById('contactLeaderLink');
+                        if (contactLink) {
+                            contactLink.remove(); // Completely remove from DOM
+                            console.log('✅ Removed Contact Ward Officer link');
+                        }
+                        
+                        // Keep My Complaints visible
+                        console.log('✅ My Complaints remains visible for leader');
+                        
+                        // Show Add News button for leaders
+                        const addNewsBtn = document.getElementById('addNewsBtn');
+                        if (addNewsBtn) {
+                            addNewsBtn.style.display = 'block';
+                            console.log('✅ Add News button shown for leader');
+                        } else {
+                            console.error('❌ Add News button not found');
+                        }
+                    } else {
+                        console.log('👤 CITIZEN detected - showing all menu items');
+                    }
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                }
+            }
+        })();
+    </script>
+
+    <script src="js/common.js?v=3"></script>
+    <script src="js/dashboard.js?v=3"></script>
+</body>
+</html>
