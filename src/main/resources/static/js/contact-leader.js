@@ -113,7 +113,7 @@ function displayLeaderInfo(leader) {
                 </div>
                 
                 <div style="margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <a href="tel:${leader.phone}" class="btn btn-primary">
+                    <a href="tel:${leader.phone}" class="btn btn-secondary">
                         📱 ${t('contact.callNow') || 'Call Now'}
                     </a>
                     <a href="mailto:${leader.email}" class="btn btn-secondary">

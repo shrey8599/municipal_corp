@@ -29,7 +29,13 @@ public class FileUploadService {
     private static final List<String> ALLOWED_CONTENT_TYPES = Arrays.asList(
         "image/jpeg",
         "image/jpg",
-        "image/png"
+        "image/png",
+        "image/webp",
+        "image/gif"
+    );
+    
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
+        ".jpg", ".jpeg", ".png", ".webp", ".gif"
     );
     
     @PostConstruct
@@ -76,9 +82,49 @@ public class FileUploadService {
         }
         
         String contentType = file.getContentType();
-        if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType.toLowerCase())) {
-            throw new RuntimeException("File type not allowed. Only JPEG and PNG images are accepted.");
+        String filename = file.getOriginalFilename();
+        
+        // Check content type (primary validation)
+        boolean isValidContentType = contentType != null && ALLOWED_CONTENT_TYPES.contains(contentType.toLowerCase());
+        
+        // Check file extension as fallback (important for mobile camera captures)
+        boolean isValidExtension = false;
+        if (filename != null) {
+            String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+            isValidExtension = ALLOWED_EXTENSIONS.contains(extension);
         }
+        
+        // Accept if either content type OR extension is valid (handles mobile camera quirks)
+        if (!isValidContentType && !isValidExtension) {
+            throw new RuntimeException("File type not allowed. Only JPEG, PNG, WebP, and GIF images are accepted. (File: " + filename + ", Type: " + contentType + ")");
+        }
+    }
+    
+    public boolean isValidImageFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return false;
+        }
+        
+        String contentType = file.getContentType();
+        String filename = file.getOriginalFilename();
+        
+        // Check content type (primary validation)
+        boolean isValidContentType = contentType != null && ALLOWED_CONTENT_TYPES.contains(contentType.toLowerCase());
+        
+        // Check file extension as fallback (important for mobile camera captures)
+        boolean isValidExtension = false;
+        if (filename != null) {
+            String extension = filename.substring(filename.lastIndexOf(".")).toLowerCase();
+            isValidExtension = ALLOWED_EXTENSIONS.contains(extension);
+        }
+        
+        // Accept if either content type OR extension is valid
+        return isValidContentType || isValidExtension;
+    }
+    
+    // Alias method for consistency with controller calls
+    public String storeFile(MultipartFile file) throws IOException {
+        return uploadFile(file);
     }
     
     public void deleteFile(String fileUrl) {

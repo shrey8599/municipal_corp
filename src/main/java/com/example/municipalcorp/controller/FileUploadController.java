@@ -40,7 +40,7 @@ public class FileUploadController {
         
         if (!fileStorageService.isValidImageFile(file)) {
             return ResponseEntity.badRequest()
-                .body(ApiResponse.error("Only image files (JPEG, PNG, GIF) are allowed"));
+                .body(ApiResponse.error("Only image files (JPEG, PNG, WebP, GIF) are allowed"));
         }
         
         String fileUrl = fileStorageService.storeFile(file);
