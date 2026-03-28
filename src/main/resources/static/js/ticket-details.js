@@ -53,7 +53,7 @@ async function loadTicketDetails() {
     const ticketId = urlParams.get('id');
     
     if (!ticketId) {
-        showAlert('Ticket ID not found', 'error');
+        showAlert(t('ticketDetails.ticketIdNotFound'), 'error');
         setTimeout(() => window.location.href = 'dashboard.html', 2000);
         return;
     }
@@ -69,7 +69,7 @@ async function loadTicketDetails() {
             loadComments(ticketId);
         }
     } catch (error) {
-        showAlert('Failed to load ticket details', 'error');
+        showAlert(t('ticketDetails.failedToLoad'), 'error');
         console.error(error);
     }
 }
@@ -88,7 +88,7 @@ function displayTicketDetails(ticket) {
                     <p style="color: var(--text-muted);">${ticket.ticketId}</p>
                 </div>
                 <span class="ticket-status ${getStatusClass(ticket.status)}" style="font-size: 1.1em;">
-                    ${ticket.status.replace('_', ' ')}
+                    ${getStatusTranslation(ticket.status)}
                 </span>
             </div>
         </div>
@@ -115,54 +115,57 @@ function displayTicketDetails(ticket) {
             : '';
     document.getElementById('ticketInfo').innerHTML = `
         <div class="section" style="${infoBg}">
-            <h3 style="color: var(--primary-color); margin-bottom: 15px;">Complaint Details</h3>
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">${t('ticketDetails.title')}</h3>
             <div style="display: grid; gap: 15px;">
                 <div>
-                    <strong>Category:</strong> 
+                    <strong>${t('ticketDetails.category')}:</strong> 
                     ${getCategoryIcon(ticket.category)} ${ticket.category.replace('_', ' ')}
                 </div>
                 <div>
-                    <strong>Type:</strong> ${ticket.type}
+                    <strong>${t('ticketDetails.type')}:</strong> ${ticket.type}
                 </div>
                 <div>
-                    <strong>Status:</strong> ${ticket.status.replace('_', ' ')}
+                    <strong>${t('ticketDetails.status')}:</strong> ${getStatusTranslation(ticket.status)}
                 </div>
                 <div>
-                    <strong>Filed by:</strong> ${ticket.citizen.name}
+                    <strong>${t('ticketDetails.filedBy')}:</strong> ${ticket.citizen.name}
                 </div>
                 ${isLeader ? `
                     <div style="margin-top: 5px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <strong>Contact citizen:</strong>
-                        ${ticket.citizen.phone ? `<a href="tel:${ticket.citizen.phone}" style="padding:5px 14px; background:#17a2b8; color:white; text-decoration:none; border-radius:5px; font-size:0.9em; font-weight:500;">📞 Call Now</a>` : '<span style="color:var(--text-muted); font-size:0.9em;">No phone on file</span>'}
-                        ${ticket.citizen.email ? `<a href="mailto:${ticket.citizen.email}" style="padding:5px 14px; background:#28a745; color:white; text-decoration:none; border-radius:5px; font-size:0.9em; font-weight:500;">✉️ Email Now</a>` : '<span style="color:var(--text-muted); font-size:0.9em;">No email on file</span>'}
+                        <strong>${t('ticketDetails.contactCitizen')}:</strong>
+                        ${ticket.citizen.phone ? `<a href="tel:${ticket.citizen.phone}" style="padding:5px 14px; background:#17a2b8; color:white; text-decoration:none; border-radius:5px; font-size:0.9em; font-weight:500;">📞 ${t('ticketDetails.callNow')}</a>` : '<span style="color:var(--text-muted); font-size:0.9em;">${t(\'ticketDetails.noPhone\')}</span>'}
+                        ${ticket.citizen.email ? `<a href="mailto:${ticket.citizen.email}" style="padding:5px 14px; background:#28a745; color:white; text-decoration:none; border-radius:5px; font-size:0.9em; font-weight:500;">✉️ ${t('ticketDetails.emailNow')}</a>` : '<span style="color:var(--text-muted); font-size:0.9em;">${t(\'ticketDetails.noEmail\')}</span>'}
+                    </div>
+                    <div style="${ticket.citizen.address ? 'margin: 12px 0;' : ''}">
+                        <strong>📍 Address:</strong> ${ticket.citizen.address ? ticket.citizen.address : '<span style="color:var(--text-muted);">Not provided</span>'}
                     </div>
                 ` : ''}
                 ${ticket.assignedLeader ? `
                     <div>
-                        <strong>Assigned to:</strong> ${ticket.assignedLeader.name} (${ticket.assignedLeader.jurisdiction})
+                        <strong>${t('ticketDetails.assignedTo')}:</strong> ${ticket.assignedLeader.name} (${ticket.assignedLeader.jurisdiction})
                     </div>
                 ` : ''}
                 <div>
-                    <strong>Created:</strong> ${formatDate(ticket.createdAt)}
+                    <strong>${t('ticketDetails.created')}:</strong> ${formatDate(ticket.createdAt)}
                 </div>
                 <div>
-                    <strong>Last Updated:</strong> ${formatDate(ticket.updatedAt)}
+                    <strong>${t('ticketDetails.lastUpdated')}:</strong> ${formatDate(ticket.updatedAt)}
                 </div>
                 ${ticket.closedAt ? `
                     <div>
-                        <strong>Closed:</strong> ${formatDate(ticket.closedAt)}
+                        <strong>${t('ticketDetails.closed')}:</strong> ${formatDate(ticket.closedAt)}
                     </div>
                 ` : ''}
             </div>
             
             <div style="margin-top: 20px; padding: 15px; background: var(--light-bg); border-radius: 8px;">
-                <strong>Description:</strong>
+                <strong>${t('ticketDetails.description')}:</strong>
                 <p style="margin-top: 10px; line-height: 1.6;">${ticket.description}</p>
             </div>
             
             ${ticket.resolutionNote ? `
                 <div style="margin-top: 15px; padding: 15px; background: #d4edda; border-radius: 8px; border-left: 4px solid var(--success-color);">
-                    <strong>Resolution Note:</strong>
+                    <strong>${t('ticketDetails.resolutionNote')}:</strong>
                     <p style="margin-top: 10px; line-height: 1.6;">${ticket.resolutionNote}</p>
                 </div>
             ` : ''}
@@ -197,7 +200,7 @@ async function loadComments(ticketId) {
         } else {
             commentsContainer.innerHTML = `
                 <p style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    No comments yet. Be the first to comment!
+                    ${t('ticketDetails.noComments')}
                 </p>
             `;
         }
@@ -214,7 +217,7 @@ document.getElementById('commentForm')?.addEventListener('submit', async (e) => 
     const commentText = document.getElementById('commentText').value;
     
     if (!currentTicket || !user) {
-        showAlert('Unable to add comment', 'error');
+        showAlert(t('ticketDetails.unableToAddComment'), 'error');
         return;
     }
     
@@ -225,19 +228,19 @@ document.getElementById('commentForm')?.addEventListener('submit', async (e) => 
         });
         
         if (response.success) {
-            showAlert('Comment added successfully', 'success');
+            showAlert(t('ticketDetails.commentAdded'), 'success');
             document.getElementById('commentText').value = '';
             loadComments(currentTicket.id);
         }
     } catch (error) {
-        showAlert(error.message || 'Failed to add comment', 'error');
+        showAlert(error.message || t('ticketDetails.commentFailed'), 'error');
     }
 });
 
 // Update ticket status (for leaders)
 async function updateStatus(newStatus) {
     if (!currentTicket) {
-        showAlert('No ticket loaded', 'error');
+        showAlert(t('ticketDetails.noTicketLoaded'), 'error');
         return;
     }
     
@@ -247,7 +250,7 @@ async function updateStatus(newStatus) {
         return;
     }
     
-    if (!confirm(`Are you sure you want to mark this ticket as ${newStatus.replace('_', ' ')}?`)) {
+    if (!confirm(`${t('ticketDetails.confirmStatusUpdate')} ${t('status.' + newStatus.toLowerCase())}?`)) {
         return;
     }
     
@@ -257,11 +260,11 @@ async function updateStatus(newStatus) {
         });
         
         if (response.success) {
-            showAlert('Status updated successfully', 'success');
+            showAlert(t('ticketDetails.statusUpdated'), 'success');
             loadTicketDetails(); // Reload details
         }
     } catch (error) {
-        showAlert(error.message || 'Failed to update status', 'error');
+        showAlert(error.message || t('ticketDetails.statusUpdateFailed'), 'error');
     }
 }
 
@@ -284,22 +287,22 @@ function showResolutionModal(ticketId) {
     `;
     modal.innerHTML = `
         <div class="modal-content" style="max-width: 500px; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-height: 80vh; overflow-y: auto;" onclick="event.stopPropagation()">
-            <h2>Mark Ticket as Resolved</h2>
+            <h2>${t('ticketDetails.markAsResolved')}</h2>
             <p style="color: var(--text-secondary); margin-bottom: 15px;">You can optionally add a resolution note to provide details about how the issue was resolved.</p>
             <div class="form-group">
-                <label for="resolutionNoteModal">Resolution Note (Optional)</label>
+                <label for="resolutionNoteModal">${t('ticketDetails.resolutionNoteOptional')}</label>
                 <textarea 
                     id="resolutionNoteModal" 
                     name="resolutionNote" 
                     rows="4" 
-                    placeholder="Enter resolution details (optional)..."
+                    placeholder="${t('ticketDetails.enterResolutionDetails')}"
                     style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 5px;"
                 ></textarea>
             </div>
             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
-                <button type="button" class="btn btn-secondary" onclick="closeResolutionModal()">Cancel</button>
-                <button type="button" class="btn btn-success" onclick="resolveWithoutNote(${ticketId})">Resolve Without Note</button>
-                <button type="button" class="btn btn-primary" onclick="resolveWithNote(${ticketId})">Add Note & Resolve</button>
+                <button type="button" class="btn btn-secondary" onclick="closeResolutionModal()">${t('ticketDetails.cancel')}</button>
+                <button type="button" class="btn btn-success" onclick="resolveWithoutNote(${ticketId})">${t('ticketDetails.resolveWithoutNote')}</button>
+                <button type="button" class="btn btn-primary" onclick="resolveWithNote(${ticketId})">${t('ticketDetails.addNoteResolve')}</button>
             </div>
         </div>
     `;
@@ -329,11 +332,11 @@ async function resolveWithoutNote(ticketId) {
         });
         
         if (response.success) {
-            showAlert('Ticket marked as resolved', 'success');
+            showAlert(t('ticketDetails.markedAsResolved'), 'success');
             loadTicketDetails();
         }
     } catch (error) {
-        showAlert(error.message || 'Failed to resolve ticket', 'error');
+        showAlert(error.message || t('ticketDetails.failedToResolve'), 'error');
     }
 }
 
@@ -342,7 +345,7 @@ async function resolveWithNote(ticketId) {
     const resolutionNote = document.getElementById('resolutionNoteModal').value.trim();
     
     if (!resolutionNote) {
-        showAlert('Please enter a resolution note or use "Resolve Without Note"', 'error');
+        showAlert(t('ticketDetails.enterResolutionNote'), 'error');
         return;
     }
     
@@ -354,10 +357,10 @@ async function resolveWithNote(ticketId) {
         });
         
         if (response.success) {
-            showAlert('Ticket marked as resolved with note', 'success');
+            showAlert(t('ticketDetails.markedWithNote'), 'success');
             loadTicketDetails();
         }
     } catch (error) {
-        showAlert(error.message || 'Failed to resolve ticket', 'error');
+        showAlert(error.message || t('ticketDetails.failedToResolve'), 'error');
     }
 }

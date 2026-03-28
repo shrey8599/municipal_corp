@@ -60,7 +60,7 @@ async function loadProfile() {
             displayProfile(response.data, user.role);
         }
     } catch (error) {
-        showAlert(error.message || 'Failed to load profile', 'error');
+        showAlert(t('profile.loadProfileFailed'), 'error');
     }
 }
 
@@ -100,39 +100,57 @@ function displayProfile(data, role) {
 
 // Add individual profile field with edit capability
 function addProfileField(container, fieldName, label, value, requiresOTP = false, role, readOnly = false) {
+    // Get translation key for the label if available
+    const labelKey = getTranslationKeyForField(fieldName, role);
+    const translatedLabel = labelKey ? t(labelKey) : label;
+    
     const fieldDiv = document.createElement('div');
     fieldDiv.className = 'field-row';
     fieldDiv.id = `field-${fieldName}`;
     
     fieldDiv.innerHTML = `
         <div class="field-display" id="display-${fieldName}">
-            <div class="field-label">${label}</div>
-            <div class="field-value">${value || 'Not set'}</div>
+            <div class="field-label">${translatedLabel}</div>
+            <div class="field-value">${value || t('profile.notSet')}</div>
             ${!readOnly ? `
-                <button class="btn-icon-edit" onclick="startEditField('${fieldName}', ${requiresOTP})" title="Edit ${label}">
+                <button class="btn-icon-edit" onclick="startEditField('${fieldName}', ${requiresOTP})" title="Edit ${translatedLabel}">
                     ✏️
                 </button>
-            ` : '<span class="read-only-badge">Read-only</span>'}
+            ` : '<span class="read-only-badge">' + t('profile.readOnlyBadge') + '</span>'}
         </div>
         <div class="field-edit" id="edit-${fieldName}" style="display: none;">
-            <div class="field-label">${label}</div>
+            <div class="field-label">${translatedLabel}</div>
             ${fieldName === 'address' ? 
                 `<textarea id="input-${fieldName}" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">${value || ''}</textarea>` :
                 `<input type="${fieldName === 'email' ? 'email' : 'text'}" id="input-${fieldName}" value="${value || ''}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" />`
             }
             <div class="field-actions">
                 <button class="btn btn-primary btn-sm" onclick="saveField('${fieldName}', ${requiresOTP}, '${role}')">
-                    💾 Save
+                    💾 ${t('profile.saveButton')}
                 </button>
                 <button class="btn btn-secondary btn-sm" onclick="cancelEditField('${fieldName}')">
-                     Cancel
+                    ${t('profile.cancelButton')}
                 </button>
             </div>
-            ${requiresOTP ? '<small style="color: #666;">⚠️ Changing this will require OTP verification</small>' : ''}
+            ${requiresOTP ? '<small style="color: #666;">⚠️ ' + t('profile.changeWarning') + '</small>' : ''}
         </div>
     `;
     
     container.appendChild(fieldDiv);
+}
+
+// Helper function to get translation key for field names
+function getTranslationKeyForField(fieldName, role) {
+    const keyMap = {
+        'name': 'profile.fieldName',
+        'phone': 'profile.fieldPhone',
+        'email': 'profile.fieldEmail',
+        'address': 'profile.fieldAddress',
+        'wardNumber': 'profile.fieldWardNumber',
+        'designation': 'profile.fieldDesignation',
+        'jurisdiction': 'profile.fieldJurisdiction',
+    };
+    return keyMap[fieldName] || null;
 }
 
 // Start editing a field
@@ -156,7 +174,7 @@ window.saveField = async function(fieldName, requiresOTP, role) {
     const oldValue = originalData[fieldName];
     
     if (!newValue) {
-        showAlert(`${fieldName} cannot be empty`, 'error');
+        showAlert(`${t(getTranslationKeyForField(fieldName, role) || 'field')} ${t('profile.emptyFieldError')}`, 'error');
         return;
     }
     
@@ -188,7 +206,9 @@ async function updateSingleField(fieldName, newValue, role) {
         });
         
         if (response.success) {
-            showAlert(`${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} updated successfully`, 'success');
+            const fieldKey = getTranslationKeyForField(fieldName, role);
+            const fieldLabel = fieldKey ? t(fieldKey) : fieldName;
+            showAlert(`${fieldLabel} ${t('profile.updateSuccess')}`, 'success');
             originalData[fieldName] = newValue;
             
             // Update display
@@ -236,22 +256,24 @@ async function updateSingleField(fieldName, newValue, role) {
             cancelEditField(fieldName);
         }
     } catch (error) {
-        showAlert(error.message || `Failed to update ${fieldName}`, 'error');
+        const fieldKey = getTranslationKeyForField(fieldName, role);
+        const fieldLabel = fieldKey ? t(fieldKey) : fieldName;
+        showAlert(error.message || `${t('profile.updateFailed')} ${fieldLabel}`, 'error');
     }
 }
 
 // Show OTP verification modal
 function showOTPVerificationModal(fieldName, newValue, role) {
-    const fieldLabel = fieldName === 'phone' ? 'Phone Number' : 'Email';
+    const fieldLabel = fieldName === 'phone' ? t('profile.fieldPhone') : t('profile.fieldEmail');
+    const otpTargetLabel = fieldName === 'phone' ? t('profile.fieldEmail') : t('profile.fieldPhone');
 
     // Security: OTP goes to the EXISTING opposite contact, not the new value
     // Changing phone → OTP sent to existing email
     // Changing email → OTP sent to existing phone
     const otpTarget = fieldName === 'phone' ? originalData.email : originalData.phone;
-    const otpTargetLabel = fieldName === 'phone' ? 'email' : 'phone';
 
-    if (!otpTarget || otpTarget === 'Not set') {
-        showAlert(`Cannot verify: no ${otpTargetLabel} on file. Please add a ${otpTargetLabel} first.`, 'error');
+    if (!otpTarget || otpTarget === t('profile.notSet')) {
+        showAlert(`${t('profile.verifyOTPModal')}: ${t('profile.notSet')} ${otpTargetLabel}`, 'error');
         return;
     }
     
@@ -260,46 +282,46 @@ function showOTPVerificationModal(fieldName, newValue, role) {
     modal.style.display = 'flex';
     modal.innerHTML = `
         <div class="modal-content" style="max-width: 500px;">
-            <h2>🔐 Verify ${fieldLabel} Change</h2>
+            <h2>🔐 ${t('profile.verifyOTPModal')}</h2>
             <p style="margin: 15px 0; color: #555;">
-                You are changing your ${fieldLabel.toLowerCase()} to:<br>
+                ${t('profile.changeWarning')}:<br>
                 <strong style="color: #1976d2; font-size: 18px;">${newValue}</strong>
             </p>
             <p style="margin-bottom: 15px; color: #555;">
-                For security, the verification OTP will be sent to your existing ${otpTargetLabel}:<br>
+                ${t('profile.notSet')} ${otpTargetLabel}:<br>
                 <strong style="color: #2A9D8F;">${otpTarget}</strong>
             </p>
             
             <div id="otpSteps">
                 <!-- Step 1: Send OTP -->
                 <div id="sendOTPStep">
-                    <p style="margin-bottom: 15px; color: #666;">Click below to receive a 6-digit OTP on your ${otpTargetLabel}:</p>
+                    <p style="margin-bottom: 15px; color: #666;">${t('profile.sendOTPButton')}</p>
                     <button onclick="sendFieldOTP('${otpTarget}')" class="btn btn-primary btn-block" style="width: 100%;">
-                        📩 Send OTP to ${otpTarget}
+                        📩 ${t('profile.sendOTPButton')} ${otpTarget}
                     </button>
                 </div>
                 
                 <!-- Step 2: Verify OTP -->
                 <div id="verifyOTPStep" style="display: none;">
                     <div class="form-group">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">Enter the OTP sent to your ${otpTargetLabel}:</label>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">${t('profile.verifyButton')}:</label>
                         <input type="text" id="otpInput" maxlength="6" placeholder="000000" 
                                style="width: 100%; padding: 15px; font-size: 24px; text-align: center; letter-spacing: 8px; font-weight: bold; border: 2px solid #ddd; border-radius: 4px;">
                     </div>
                     <button onclick="verifyFieldOTP('${fieldName}', '${newValue}', '${role}', '${otpTarget}')" 
                             class="btn btn-primary btn-block" style="width: 100%; margin-top: 15px;">
-                        ✓ Verify & Update
+                        ✓ ${t('profile.verifyButton')}
                     </button>
                     <button onclick="sendFieldOTP('${otpTarget}')" 
                             class="btn btn-secondary btn-block" style="width: 100%; margin-top: 10px;">
-                        🔄 Resend OTP
+                        🔄 ${t('profile.resendOTPButton')}
                     </button>
                 </div>
             </div>
             
             <button onclick="closeOTPModal(); cancelEditField('${fieldName}')" 
                     class="btn btn-secondary btn-block" style="width: 100%; margin-top: 15px;">
-                ✕ Cancel
+                ✕ ${t('profile.cancelButton')}
             </button>
         </div>
     `;
@@ -338,13 +360,13 @@ window.sendFieldOTP = async function(identifier) {
                 if (otpInput) {
                     otpInput.value = response.data.otp;
                 }
-                showAlert(`OTP sent: ${response.data.otp}`, 'success');
+                showAlert(`${t('profile.sentOTP')}: ${response.data.otp}`, 'success');
             } else {
-                showAlert(`OTP sent successfully to ${identifier}`, 'success');
+                showAlert(`${t('profile.sentOTP')}: ${identifier}`, 'success');
             }
         }
     } catch (error) {
-        showAlert('Failed to send OTP: ' + error.message, 'error');
+        showAlert(t('profile.otpSendFailed') + ': ' + error.message, 'error');
     }
 };
 
@@ -353,7 +375,7 @@ window.verifyFieldOTP = async function(fieldName, newValue, role, otpTarget) {
     const otp = document.getElementById('otpInput').value.trim();
     
     if (!otp || otp.length !== 6) {
-        showAlert('Please enter a valid 6-digit OTP', 'error');
+        showAlert(t('profile.invalidOTP'), 'error');
         return;
     }
     
@@ -368,16 +390,16 @@ window.verifyFieldOTP = async function(fieldName, newValue, role, otpTarget) {
         });
         
         if (verifyResponse.success) {
-            showAlert('OTP verified successfully', 'success');
+            showAlert(t('profile.otpVerifiedSuccess'), 'success');
             closeOTPModal();
             
             // Update the field to the new value
             await updateSingleField(fieldName, newValue, role);
         } else {
-            showAlert('Invalid OTP. Please try again.', 'error');
+            showAlert(t('profile.invalidOTP'), 'error');
         }
     } catch (error) {
-        showAlert('Invalid OTP: ' + error.message, 'error');
+        showAlert(t('profile.invalidOTP') + ': ' + error.message, 'error');
         document.getElementById('otpInput').value = '';
         document.getElementById('otpInput').focus();
     }
@@ -398,14 +420,14 @@ document.getElementById('profilePictureInput')?.addEventListener('change', async
     
     // Validate file size (5MB max for profile pictures)
     if (file.size > 5 * 1024 * 1024) {
-        showAlert('File size must be less than 5MB', 'error');
+        showAlert(t('profile.fileSizeTooLarge'), 'error');
         e.target.value = ''; // Reset input
         return;
     }
     
     // Validate file type
     if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-        showAlert('Only JPEG and PNG images are allowed', 'error');
+        showAlert(t('profile.invalidFileType'), 'error');
         e.target.value = ''; // Reset input
         return;
     }
@@ -423,14 +445,14 @@ document.getElementById('profilePictureInput')?.addEventListener('change', async
         
         if (!token) {
             console.error('No authentication token found');
-            showAlert('You are not logged in. Please login again.', 'error');
+            showAlert(t('profile.notLoggedIn'), 'error');
             window.location.href = '/login.html';
             return;
         }
         
         if (!user) {
             console.error('No user data found');
-            showAlert('User session expired. Please login again.', 'error');
+            showAlert(t('profile.sessionExpired'), 'error');
             window.location.href = '/login.html';
             return;
         }
@@ -452,7 +474,7 @@ document.getElementById('profilePictureInput')?.addEventListener('change', async
         if (!uploadResponse.ok) {
             if (uploadResponse.status === 401 || uploadResponse.status === 403) {
                 console.error('Authentication failed - token may be expired or invalid');
-                showAlert('Your session has expired. Please login again.', 'error');
+                showAlert(t('profile.sessionExpired'), 'error');
                 setTimeout(() => {
                     window.location.href = '/login.html';
                 }, 2000);
@@ -496,7 +518,7 @@ document.getElementById('profilePictureInput')?.addEventListener('change', async
         });
         
         if (updateResponse.success) {
-            showAlert('Profile picture updated successfully', 'success');
+            showAlert(t('profile.profilePictureUpdated'), 'success');
             document.getElementById('profilePic').src = imageUrl;
             
             // Update user data in localStorage for real-time sync
@@ -511,7 +533,7 @@ document.getElementById('profilePictureInput')?.addEventListener('change', async
         }
     } catch (error) {
         console.error('Error uploading profile picture:', error);
-        showAlert(error.message || 'Failed to upload profile picture', 'error');
+        showAlert(t('profile.uploadFailed'), 'error');
     } finally {
         // Reset file input
         e.target.value = '';

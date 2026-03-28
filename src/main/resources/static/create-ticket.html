@@ -5,16 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Complaint - Municipal Corporation</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/lang.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
+            <button id="hamburger-menu-btn" title="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-brand">
                 <h2>🏛️ Municipal Corp</h2>
             </div>
             <div class="nav-menu">
                 <span id="userName" class="user-name"></span>
-                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+                <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="nav.logout">Logout</button>
             </div>
         </div>
     </nav>
@@ -22,70 +28,70 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="dashboard.html">📊 Dashboard</a></li>
-                <li class="active"><a href="create-ticket.html">➕ New Complaint</a></li>
-                <li><a href="my-tickets.html">📋 My Complaints</a></li>
-                <li id="contactLeaderLink" style="display: block;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
-                <li><a href="profile.html">👤 Profile</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.dashboard">📊 Dashboard</a></li>
+                <li class="active"><a href="create-ticket.html" data-i18n="nav.newComplaint">➕ New Complaint</a></li>
+                <li id="myComplaintsLink"><a href="my-tickets.html" data-i18n="nav.myComplaints">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html" data-i18n="nav.contactOfficer">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html" data-i18n="nav.profile">👤 Profile</a></li>
             </ul>
         </aside>
 
         <main class="main-content">
             <div class="form-container">
                 <div class="form-header">
-                    <h1>📝 File New Complaint</h1>
-                    <p>Report an issue in your area</p>
+                    <h1 data-i18n="createTicket.title">📝 File New Complaint</h1>
+                    <p data-i18n="createTicket.subtitle">Report an issue in your area</p>
                 </div>
 
                 <form id="ticketForm" class="ticket-form">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Complaint Type *</label>
+                            <label data-i18n="createTicket.typeLabel">Complaint Type *</label>
                             <select id="type" required>
-                                <option value="COMPLAINT">Complaint</option>
-                                <option value="FEEDBACK">Service Request</option>
-                                <option value="SUGGESTION">Suggestion</option>
+                                <option value="COMPLAINT" data-i18n="createTicket.typeComplaint">Complaint</option>
+                                <option value="FEEDBACK" data-i18n="createTicket.typeRequest">Service Request</option>
+                                <option value="SUGGESTION" data-i18n="createTicket.typeSuggestion">Suggestion</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Category *</label>
+                            <label data-i18n="createTicket.category">Category *</label>
                             <select id="category" required>
-                                <option value="">Select Category</option>
-                                <option value="STREET_LIGHTS">🔦 Street Lights</option>
-                                <option value="ROADS">🛣️ Roads & Potholes</option>
-                                <option value="WATER_SUPPLY">💧 Water Supply</option>
-                                <option value="GARBAGE_COLLECTION">🗑️ Garbage Collection</option>
-                                <option value="DRAINAGE">🚰 Sewage & Drainage</option>
-                                <option value="PARKS">🌳 Parks & Gardens</option>
-                                <option value="OTHER">📋 Others</option>
+                                <option value="" data-i18n="createTicket.categoryPlaceholder">Select Category</option>
+                                <option value="STREET_LIGHTS" data-i18n="createTicket.categoryStreetLights">🔦 Street Lights</option>
+                                <option value="ROADS" data-i18n="createTicket.categoryRoads">🛣️ Roads & Potholes</option>
+                                <option value="WATER_SUPPLY" data-i18n="createTicket.categoryWater">💧 Water Supply</option>
+                                <option value="GARBAGE_COLLECTION" data-i18n="createTicket.categoryGarbage">🗑️ Garbage Collection</option>
+                                <option value="DRAINAGE" data-i18n="createTicket.categorySewage">🚰 Sewage & Drainage</option>
+                                <option value="PARKS" data-i18n="createTicket.categoryParks">🌳 Parks & Gardens</option>
+                                <option value="OTHER" data-i18n="createTicket.categoryOthers">📋 Others</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Title *</label>
-                        <input type="text" id="title" placeholder="Brief description of the issue" 
+                        <label data-i18n="createTicket.titleLabel">Title *</label>
+                        <input type="text" id="title" data-i18n-placeholder="createTicket.titlePlaceholder" placeholder="Brief description of the issue" 
                                maxlength="100" required>
                         <small class="char-count">0/100 characters</small>
                     </div>
 
                     <div class="form-group">
-                        <label>Description *</label>
+                        <label data-i18n="createTicket.description">Description *</label>
                         <textarea id="description" rows="5" 
-                                  placeholder="Provide detailed information about the issue..." 
+                                  data-i18n-placeholder="createTicket.descriptionPlaceholder" placeholder="Provide detailed information about the issue..." 
                                   maxlength="500" required></textarea>
                         <small class="char-count">0/500 characters</small>
                     </div>
 
                     <div class="form-group">
-                        <label>Upload Photos (Optional)</label>
+                        <label data-i18n="createTicket.images">Upload Photos (Optional)</label>
                         <div class="file-upload-area" id="fileUploadArea">
                             <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif" 
                                    multiple style="display: none;">
                             <div class="upload-prompt" onclick="document.getElementById('fileInput').click()">
                                 <div class="upload-icon">📷</div>
-                                <p>Click to upload photos</p>
-                                <small>JPEG, PNG, GIF (Max 10MB each)</small>
+                                <p data-i18n="createTicket.uploadPrompt">Click to upload photos</p>
+                                <small data-i18n="createTicket.fileFormat">JPEG, PNG, GIF (Max 10MB each)</small>
                             </div>
                             <div id="previewContainer" class="preview-container"></div>
                         </div>
@@ -93,8 +99,8 @@
 
                     <div class="form-actions">
                         <button type="button" onclick="window.location.href='dashboard.html'" 
-                                class="btn btn-secondary">Cancel</button>
-                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                                class="btn btn-secondary" data-i18n="createTicket.cancel">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn" data-i18n="createTicket.submit">
                             Submit Complaint
                         </button>
                     </div>
@@ -108,5 +114,19 @@
 
     <script src="js/common.js"></script>
     <script src="js/create-ticket.js"></script>
+    
+    <script>
+        // Handle menu visibility for citizens vs leaders
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getUser();
+            if (user && user.role !== 'LEADER') {
+                // Show contact leader link for citizens
+                const contactLeaderLink = document.getElementById('contactLeaderLink');
+                if (contactLeaderLink) {
+                    contactLeaderLink.style.display = 'list-item';
+                }
+            }
+        });
+    </script>
 </body>
 </html>

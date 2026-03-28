@@ -23,11 +23,18 @@ function setupTicketsPage() {
         if (newComplaintLink) newComplaintLink.style.display = 'none';
         
         const sectionTitle = document.getElementById('sectionTitle');
-        if (sectionTitle) sectionTitle.textContent = 'Assigned Complaints';
+        if (sectionTitle) {
+            sectionTitle.removeAttribute('data-i18n');
+            sectionTitle.textContent = t('tickets.assigned');
+        }
     } else {
         // Show contact leader link for citizens
         const contactLeaderLink = document.getElementById('contactLeaderLink');
         if (contactLeaderLink) contactLeaderLink.style.display = 'list-item';
+        
+        // Show citizen notice
+        const citizenNotice = document.getElementById('citizenNotice');
+        if (citizenNotice) citizenNotice.style.display = 'block';
     }
 }
 
@@ -58,7 +65,7 @@ async function loadTickets() {
         console.error('Failed to load tickets:', error);
         document.getElementById('ticketsContainer').innerHTML = `
             <div class="loading" style="color: var(--danger-color)">
-                Failed to load complaints. Please try again.
+                ${t('tickets.failedToLoad')}
             </div>
         `;
     }
@@ -73,8 +80,8 @@ function displayTickets(tickets) {
     if (!tickets || tickets.length === 0) {
         container.innerHTML = `
             <div class="loading">
-                <p>No complaints ${isLeader ? 'assigned' : 'yet'}.</p>
-                ${!isLeader ? '<a href="create-ticket.html" class="btn btn-primary" style="margin-top: 15px">File Your First Complaint</a>' : ''}
+                <p>${t('tickets.noComplaints')} ${isLeader ? t('tickets.none') : t('tickets.noneYet')}.</p>
+                ${!isLeader ? `<a href="create-ticket.html" class="btn btn-primary" style="margin-top: 15px">${t('tickets.filing')}</a>` : ''}
             </div>
         `;
         return;
@@ -83,29 +90,28 @@ function displayTickets(tickets) {
     // Group tickets by status priority, newest first within each group
     const newestFirst = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
     const groups = [
-        { label: '🔴 Open', tickets: tickets.filter(t => t.status === 'OPEN' || t.status === 'PENDING').sort(newestFirst) },
-        { label: '🟡 In Progress', tickets: tickets.filter(t => t.status === 'IN_PROGRESS').sort(newestFirst) },
-        { label: '🟢 Resolved / Closed', tickets: tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').sort(newestFirst) },
+        { label: `🔴 ${t('tickets.statusOpen')}`, tickets: tickets.filter(t => t.status === 'OPEN' || t.status === 'PENDING').sort(newestFirst) },
+        { label: `🟡 ${t('tickets.statusInProgress')}`, tickets: tickets.filter(t => t.status === 'IN_PROGRESS').sort(newestFirst) },
+        { label: `🟢 ${t('tickets.statusResolved')}`, tickets: tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').sort(newestFirst) },
     ].filter(g => g.tickets.length > 0);
 
     const renderCard = (ticket) => {
         const leaderActions = isLeader && ticket.status !== 'CLOSED' ? `
             <div class="ticket-actions" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 8px; flex-wrap: wrap;" onclick="event.stopPropagation()">
-                <button class="btn btn-sm btn-warning" onclick="quickUpdateStatus(${ticket.id}, 'IN_PROGRESS')" style="font-size: 0.85em;">
+                <button class="btn btn-sm btn-warning" onclick="quickUpdateStatus(${ticket.id}, 'IN_PROGRESS')" style="font-size: 0.85em;" data-i18n="tickets.quickActionInProgress">
                     ⏳ In Progress
                 </button>
-                <button class="btn btn-sm btn-success" onclick="quickUpdateStatus(${ticket.id}, 'RESOLVED')" style="font-size: 0.85em;">
+                <button class="btn btn-sm btn-success" onclick="quickUpdateStatus(${ticket.id}, 'RESOLVED')" style="font-size: 0.85em;" data-i18n="tickets.quickActionResolved">
                     ✅ Resolved
                 </button>
-                <button class="btn btn-sm btn-secondary" onclick="showQuickComment(${ticket.id})" style="font-size: 0.85em;">
+                <button class="btn btn-sm btn-secondary" onclick="showQuickComment(${ticket.id})" style="font-size: 0.85em;" data-i18n="tickets.quickActionAddComment">
                     💬 Add Comment
                 </button>
-                <button class="btn btn-sm btn-primary" onclick="viewTicket(${ticket.id})" style="font-size: 0.85em;">
+                <button class="btn btn-sm btn-primary" onclick="viewTicket(${ticket.id})" style="font-size: 0.85em;" data-i18n="tickets.quickActionViewDetails">
                     👁️ View Details
                 </button>
             </div>
         ` : '';
-
 
         
         // Get background color based on status
@@ -120,7 +126,7 @@ function displayTickets(tickets) {
             <div class="ticket-card" ${!isLeader || ticket.status === 'CLOSED' ? `onclick="viewTicket(${ticket.id})"` : ''} style="${backgroundColor} ${isLeader ? 'cursor: default;' : ''}">
                 <div class="ticket-header">
                     <span class="ticket-id">${ticket.ticketId}</span>
-                    <span class="ticket-status ${getStatusClass(ticket.status)}">${ticket.status.replace('_', ' ')}</span>
+                    <span class="ticket-status ${getStatusClass(ticket.status)}">${getStatusTranslation(ticket.status)}</span>
                 </div>
                 <div class="ticket-title">
                     ${getCategoryIcon(ticket.category)} ${ticket.title}
@@ -132,8 +138,8 @@ function displayTickets(tickets) {
                     <span>📅 ${formatDate(ticket.createdAt)}</span>
                     <span>📍 ${ticket.category.replace('_', ' ')}</span>
                     ${ticket.citizen ? `<span>👤 ${ticket.citizen.name}</span>` : ''}
-                    ${isLeader && ticket.citizen && ticket.citizen.phone ? `<a href="tel:${ticket.citizen.phone}" onclick="event.stopPropagation()" style="font-size:0.82em; padding:3px 10px; background:#17a2b8; color:white; text-decoration:none; border-radius:4px; font-weight:500; white-space:nowrap;">📞 Call Now</a>` : ''}
-                    ${isLeader && ticket.citizen && ticket.citizen.email ? `<a href="mailto:${ticket.citizen.email}" onclick="event.stopPropagation()" style="font-size:0.82em; padding:3px 10px; background:#28a745; color:white; text-decoration:none; border-radius:4px; font-weight:500; white-space:nowrap;">✉️ Email Now</a>` : ''}
+                    ${isLeader && ticket.citizen && ticket.citizen.phone ? `<a href="tel:${ticket.citizen.phone}" onclick="event.stopPropagation()" style="font-size:0.82em; padding:3px 10px; background:#17a2b8; color:white; text-decoration:none; border-radius:4px; font-weight:500; white-space:nowrap;" data-i18n="tickets.callNow">📞 Call Now</a>` : ''}
+                    ${isLeader && ticket.citizen && ticket.citizen.email ? `<a href="mailto:${ticket.citizen.email}" onclick="event.stopPropagation()" style="font-size:0.82em; padding:3px 10px; background:#28a745; color:white; text-decoration:none; border-radius:4px; font-weight:500; white-space:nowrap;" data-i18n="tickets.emailNow">✉️ Email Now</a>` : ''}
                 </div>
                 ${leaderActions}
             </div>
@@ -148,6 +154,9 @@ function displayTickets(tickets) {
             ${group.tickets.map(renderCard).join('')}
         </div>
     `).join('');
+    
+    // Apply translations to dynamically created elements
+    applyPageTranslations();
 }
 
 // Update stats
@@ -177,16 +186,16 @@ async function quickUpdateStatus(ticketId, newStatus) {
         return;
     }
     
-    if (!confirm(`Update ticket status to ${newStatus.replace('_', ' ')}?`)) {
+    if (!confirm(`${t('ticketDetails.confirmStatusUpdate')} ${t('status.' + newStatus.toLowerCase())}?`)) {
         return;
     }
     
     try {
         await apiRequest(`/tickets/${ticketId}/status?status=${newStatus}`, { method: 'PATCH' });
-        showAlert(`Ticket status updated to ${newStatus.replace('_', ' ')}`, 'success');
+        showAlert(`${t('ticketDetails.statusUpdated')}`, 'success');
         loadTickets();
     } catch (error) {
-        showAlert('Failed to update status: ' + error.message, 'error');
+        showAlert(t('ticketDetails.statusUpdateFailed') + ': ' + error.message, 'error');
     }
 }
 

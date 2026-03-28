@@ -78,7 +78,7 @@ async function setupDashboard() {
         
         // Update news section title for leaders
         const newsTitle = document.querySelector('.news-section-header h2');
-        if (newsTitle) newsTitle.textContent = '📰 My Updates & Announcements';
+        if (newsTitle) newsTitle.textContent = t('dashboard.myUpdates');
         
         // Load leader's own profile
         await loadLeaderProfile(currentUser.id);
@@ -103,7 +103,7 @@ async function setupDashboard() {
         
         // Update news section title for citizens
         const newsTitle = document.querySelector('.news-section-header h2');
-        if (newsTitle) newsTitle.textContent = '📰 Latest News & Updates from Your Ward Officer';
+        if (newsTitle) newsTitle.textContent = t('dashboard.newsFrom');
         
         // Load associated leader's profile for citizens
         await loadCitizenLeader();
@@ -223,7 +223,7 @@ function displayNews(newsItems) {
     if (!newsItems || newsItems.length === 0) {
         container.innerHTML = `
             <div class="loading">
-                <p>No news or announcements yet.</p>
+                <p>${t('dashboard.noNews')}</p>
             </div>
         `;
         return;
@@ -723,3 +723,21 @@ function showErrorMessage(message) {
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
 }
+
+// Update dashboard news section translations when language changes
+window.updateDashboardNewsTranslations = function() {
+    // Update the news section title based on user role
+    const newsTitle = document.querySelector('.news-section-header h2');
+    if (newsTitle && currentUser) {
+        if (currentUser.role === 'LEADER') {
+            newsTitle.textContent = t('dashboard.myUpdates');
+        } else {
+            newsTitle.textContent = t('dashboard.newsFrom');
+        }
+    }
+    
+    // Re-display news items to update empty state message
+    if (allNews) {
+        displayNews(allNews);
+    }
+};

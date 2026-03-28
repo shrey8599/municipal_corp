@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Municipal Corporation</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/lang.js"></script>
     <style>
         .profile-container {
             max-width: 900px;
@@ -106,8 +107,8 @@
         
         .image-viewer-close {
             position: absolute;
-            top: -40px;
-            right: -40px;
+            top: 10px;
+            right: 10px;
             background: white;
             border: none;
             border-radius: 50%;
@@ -120,11 +121,22 @@
             justify-content: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             transition: transform 0.2s ease;
+            z-index: 10001;
         }
         
         .image-viewer-close:hover {
             transform: scale(1.1);
             background: #f0f0f0;
+        }
+        
+        @media (max-width: 480px) {
+            .image-viewer-close {
+                width: 36px;
+                height: 36px;
+                font-size: 20px;
+                top: 8px;
+                right: 8px;
+            }
         }
 
         .profile-header h1 {
@@ -161,10 +173,11 @@
         }
 
         .field-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: start;
+            gap: 15px;
+            padding-bottom: 10px;
         }
 
         .field-label {
@@ -172,13 +185,18 @@
             color: #555;
             margin-bottom: 5px;
             min-width: 120px;
+            grid-column: 1 / 2;
+            grid-row: 1;
+            word-break: break-word;
         }
 
         .field-value {
             color: #333;
             font-size: 16px;
-            flex: 1;
-            margin-right: 10px;
+            grid-column: 2 / 3;
+            grid-row: 1;
+            word-break: break-word;
+            padding-top: 0;
         }
 
         .btn-icon-edit {
@@ -190,6 +208,11 @@
             cursor: pointer;
             font-size: 16px;
             transition: background 0.3s;
+            grid-column: 3 / 4;
+            grid-row: 1;
+            white-space: nowrap;
+            align-self: flex-start;
+            flex-shrink: 0;
         }
 
         .btn-icon-edit:hover {
@@ -203,6 +226,46 @@
             border-radius: 15px;
             font-size: 12px;
             font-weight: 500;
+            grid-column: 3 / 4;
+            grid-row: 1;
+            white-space: nowrap;
+            align-self: flex-start;
+            text-align: right;
+        }
+        
+        @media (max-width: 480px) {
+            .field-display {
+                grid-template-columns: 1fr auto;
+                gap: 10px;
+            }
+            
+            .field-label {
+                grid-column: 1 / -1;
+                grid-row: 1;
+                margin-bottom: 8px;
+            }
+            
+            .field-value {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                margin-bottom: 5px;
+            }
+            
+            .btn-icon-edit {
+                grid-column: 2 / 3;
+                grid-row: 1;
+                align-self: center;
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+            
+            .read-only-badge {
+                grid-column: 2 / 3;
+                grid-row: 1;
+                align-self: center;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
         }
 
         .field-edit {
@@ -310,12 +373,17 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
+            <button id="hamburger-menu-btn" title="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-brand">
                 <h2>🏛️ Municipal Corp</h2>
             </div>
             <div class="nav-menu">
                 <span id="userName" class="user-name"></span>
-                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+                <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="nav.logout">Logout</button>
             </div>
         </div>
     </nav>
@@ -323,11 +391,11 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="dashboard.html">📊 Dashboard</a></li>
-                <li id="newComplaintLink"><a href="create-ticket.html">➕ New Complaint</a></li>
-                <li><a href="my-tickets.html">📋 My Complaints</a></li>
-                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
-                <li class="active"><a href="profile.html">👤 Profile</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.dashboard">📊 Dashboard</a></li>
+                <li id="newComplaintLink"><a href="create-ticket.html" data-i18n="nav.newComplaint">➕ New Complaint</a></li>
+                <li id="myComplaintsLink"><a href="my-tickets.html" data-i18n="nav.myComplaints">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html" data-i18n="nav.contactOfficer">📞 Contact Ward Officer</a></li>
+                <li class="active"><a href="profile.html" data-i18n="nav.profile">👤 Profile</a></li>
             </ul>
         </aside>
 
@@ -357,7 +425,7 @@
 
                 <!-- Profile Fields Section -->
                 <div class="profile-section">
-                    <h2>Personal Information</h2>
+                    <h2 data-i18n="common.personalInfo">Personal Information</h2>
                     <div id="profileFields">
                         <!-- Profile fields will be loaded here dynamically -->
                     </div>
@@ -365,12 +433,12 @@
 
                 <!-- Help Section -->
                 <div class="profile-section">
-                    <h2>ℹ️ How to Edit Your Profile</h2>
+                    <h2 data-i18n="common.howToEdit">ℹ️ How to Edit Your Profile</h2>
                     <ul style="color: #666; line-height: 1.8;">
-                        <li>Click the edit button (pencil icon) next to any field to edit it</li>
-                        <li>For <strong>Phone</strong> and <strong>Email</strong> changes, you'll need to verify with OTP for security</li>
-                        <li>Other fields can be updated immediately</li>
-                        <li>Ward Number cannot be changed (assigned by admin)</li>
+                        <li data-i18n="profile.helpText1">Click the edit button (pencil icon) next to any field to edit it</li>
+                        <li data-i18n="profile.helpText2">For <strong>Phone</strong> and <strong>Email</strong> changes, you'll need to verify with OTP for security</li>
+                        <li data-i18n="profile.helpText3">Other fields can be updated immediately</li>
+                        <li data-i18n="profile.helpText4">Ward Number cannot be changed (assigned by admin)</li>
                     </ul>
                 </div>
             </div>

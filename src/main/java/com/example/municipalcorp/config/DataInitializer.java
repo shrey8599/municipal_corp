@@ -26,12 +26,6 @@ public class DataInitializer implements CommandLineRunner {
         log.info("🔄 Starting test data initialization...");
         
         try {
-            // Clear existing data
-            ticketRepository.deleteAll();
-            userRepository.deleteAll();
-            leaderRepository.deleteAll();
-            otpRepository.deleteAll();
-            
             // Create Leaders
             Leader leader1 = createLeader(
                 "1111111111",

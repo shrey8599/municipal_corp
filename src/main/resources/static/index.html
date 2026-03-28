@@ -5,52 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Municipal Corporation - Complaint Management</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/lang.js"></script>
 </head>
 <body>
     <div class="container">
         <header class="hero">
             <div class="hero-content">
-                <h1>🏛️ Municipal Corporation</h1>
-                <h2>Complaint Management System</h2>
-                <p class="tagline">Your Voice, Our Responsibility</p>
+                <h1>🏛️ Municipal Corp</h1>
+                <h2 data-i18n="home.subtitle">Complaint Management System</h2>
+                <p class="tagline" data-i18n="home.tagline">Your Voice, Our Responsibility</p>
                 <div class="hero-actions">
-                    <a href="login.html" class="btn btn-primary">Get Started</a>
-                    <a href="#features" class="btn btn-secondary">Learn More</a>
+                    <a href="login.html" class="btn btn-primary" data-i18n="home.getStarted">Get Started</a>
+                    <a href="#features" class="btn btn-secondary" data-i18n="home.learnMore">Learn More</a>
                 </div>
             </div>
+            <div id="languageToggle" style="position: absolute; top: 10px; right: 10px; z-index: 1000;"></div>
         </header>
 
         <section id="features" class="features">
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">📱</div>
-                    <h3>Easy Registration</h3>
-                    <p>Register using mobile OTP authentication. Quick and secure.</p>
+                    <h3 data-i18n="home.featureEasyRegistration">Easy Registration</h3>
+                    <p data-i18n="home.featureEasyRegDesc">Register using mobile OTP authentication. Quick and secure.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📝</div>
-                    <h3>File Complaints</h3>
-                    <p>Report issues like street lights, roads, water supply, and more.</p>
+                    <h3 data-i18n="home.featureFileComplaints">File Complaints</h3>
+                    <p data-i18n="home.featureFileCompDesc">Report issues like street lights, roads, water supply, and more.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📸</div>
-                    <h3>Upload Photos</h3>
-                    <p>Add photo evidence to your complaints for faster resolution.</p>
+                    <h3 data-i18n="home.featureUploadPhotos">Upload Photos</h3>
+                    <p data-i18n="home.featureUploadPhotosDesc">Add photo evidence to your complaints for faster resolution.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔔</div>
-                    <h3>Track Status</h3>
-                    <p>Real-time updates on your complaint status and resolution.</p>
+                    <h3 data-i18n="home.featureTrackStatus">Track Status</h3>
+                    <p data-i18n="home.featureTrackStatusDesc">Real-time updates on your complaint status and resolution.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💬</div>
-                    <h3>Communication</h3>
-                    <p>Chat with ward officers and get updates on your complaints.</p>
+                    <h3 data-i18n="home.featureCommunication">Communication</h3>
+                    <p data-i18n="home.featureCommunicationDesc">Chat with ward officers and get updates on your complaints.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3>Fast Resolution</h3>
-                    <p>Direct assignment to ward officers for quick action.</p>
+                    <h3 data-i18n="home.featureFastResolution">Fast Resolution</h3>
+                    <p data-i18n="home.featureFastResDesc">Direct assignment to ward officers for quick action.</p>
                 </div>
             </div>
         </section>
@@ -59,33 +61,42 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3 class="stat-number">1000+</h3>
-                    <p>Complaints Resolved</p>
+                    <p data-i18n="home.statsResolved">Complaints Resolved</p>
                 </div>
                 <div class="stat-card">
                     <h3 class="stat-number">50+</h3>
-                    <p>Ward Officers</p>
+                    <p data-i18n="home.statsOfficers">Ward Officers</p>
                 </div>
                 <div class="stat-card">
                     <h3 class="stat-number">24/7</h3>
-                    <p>Service Available</p>
+                    <p data-i18n="home.statsAvailable">Service Available</p>
                 </div>
                 <div class="stat-card">
                     <h3 class="stat-number">95%</h3>
-                    <p>Satisfaction Rate</p>
+                    <p data-i18n="home.statsSatisfaction">Satisfaction Rate</p>
                 </div>
             </div>
         </section>
 
-        <section class="ct">
-            <h2>Ready to Make a Difference?</h2>
-            <p>Join thousands of citizens in making our city better</p>
-            <a href="login.html" class="btn btn-primary btn-large">Register Now</a>
+        <section class="cta">
+            <h2 data-i18n="home.ctaTitle">Ready to Make a Difference?</h2>
+            <p data-i18n="home.ctaSubtitle">Join thousands of citizens in making our city better</p>
+            <a href="login.html" class="btn btn-primary btn-large" data-i18n="home.ctaButton">Register Now</a>
         </section>
 
         <footer>
-            <p>&copy; 2026 Municipal Corporation. All rights reserved.</p>
-            <p>For emergencies, call: 100 | Email: support@municipal.gov</p>
+            <p data-i18n="home.footerCopyright">&copy; 2026 Municipal Corporation. All rights reserved.</p>
+            <p data-i18n="home.footerEmergency">For emergencies, call: 100 | Email: support@municipal.gov</p>
         </footer>
     </div>
+    
+    <script src="js/common.js"></script>
+    <script>
+        // Initialize language system on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeLanguageSystem();
+            applyPageTranslations();
+        });
+    </script>
 </body>
 </html>

@@ -3,51 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Municipal Corporation</title>
+    <title data-i18n="auth.title">Login - Municipal Corporation</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/lang.js"></script>
 </head>
 <body>
     <div class="auth-container">
+        <div id="languageToggleTop" style="position: absolute; top: 10px; right: 10px; z-index: 1000;"></div>
         <div class="auth-box">
             <div class="auth-header">
                 <h1>🏛️ Municipal Corp</h1>
-                <p>Login or Register</p>
+                <p data-i18n="auth.title">Login or Register</p>
             </div>
 
             <!-- Step 1: Phone Number -->
             <div id="phoneStep" class="auth-step active">
-                <h2>Enter Your Phone Number</h2>
+                <h2 data-i18n="auth.phoneStep">Enter Your Phone Number</h2>
                 <form id="phoneForm">
                     <div class="form-group">
-                        <label>Phone Number</label>
+                        <label data-i18n="auth.phoneLabel">Phone Number</label>
                         <input type="tel" id="phone" pattern="[0-9]{10}" maxlength="10" 
-                               placeholder="Enter 10-digit mobile number" required>
-                        <small>We'll send you an OTP to verify</small>
+                               data-i18n-placeholder="auth.phonePlaceholder" placeholder="Enter 10-digit mobile number" required>
+                        <small data-i18n="auth.phoneHint">We'll send you an OTP to verify</small>
                     </div>
                     <div class="form-group">
-                        <label>I am a</label>
+                        <label data-i18n="auth.roleLabel">I am a</label>
                         <select id="role" required>
-                            <option value="CITIZEN">Citizen</option>
-                            <option value="LEADER">Ward Officer</option>
+                            <option value="CITIZEN" data-i18n="auth.roleCitizen">Citizen</option>
+                            <option value="LEADER" data-i18n="auth.roleLeader">Ward Officer</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Send OTP</button>
+                    <button type="submit" class="btn btn-primary btn-block" data-i18n="auth.sendOTPButton">Send OTP</button>
                 </form>
             </div>
 
             <!-- Step 2: OTP Verification -->
             <div id="otpStep" class="auth-step">
-                <h2>Enter OTP</h2>
-                <p class="info-text">OTP sent to <span id="phoneDisplay"></span></p>
+                <h2 data-i18n="auth.otpStep">Enter OTP</h2>
+                <p class="info-text"><span data-i18n="auth.otpSentTo">OTP sent to</span> <span id="phoneDisplay"></span></p>
                 <form id="otpForm">
                     <div class="form-group">
-                        <label>OTP Code</label>
+                        <label data-i18n="auth.otpLabel">OTP Code</label>
                         <input type="text" id="otp" maxlength="6" pattern="[0-9]{6}" 
-                               placeholder="Enter 6-digit OTP" required>
-                        <small>Valid for 5 minutes</small>
+                               data-i18n-placeholder="auth.otpPlaceholder" placeholder="Enter 6-digit OTP" required>
+                        <small data-i18n="auth.otpValid">Valid for 5 minutes</small>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Verify OTP</button>
-                    <button type="button" class="btn btn-secondary btn-block" onclick="goBackToPhone()">
+                    <button type="submit" class="btn btn-primary btn-block" data-i18n="auth.verifyOTPButton">Verify OTP</button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="goBackToPhone()" data-i18n="auth.backButton">
                         Back
                     </button>
                 </form>
@@ -55,36 +57,36 @@
 
             <!-- Step 3: Registration Form -->
             <div id="registerStep" class="auth-step">
-                <h2>Complete Registration</h2>
+                <h2 data-i18n="auth.registerStep">Complete Registration</h2>
                 <form id="registerForm">
                     <div class="form-group">
-                        <label>Full Name *</label>
-                        <input type="text" id="name" placeholder="Enter your full name" required>
+                        <label data-i18n="auth.fullNameLabel">Full Name *</label>
+                        <input type="text" id="name" data-i18n-placeholder="auth.fullNamePlaceholder" placeholder="Enter your full name" required>
                     </div>
                     <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="email" placeholder="Enter your email" required>
+                        <label data-i18n="auth.emailLabel">Email *</label>
+                        <input type="email" id="email" data-i18n-placeholder="auth.emailPlaceholder" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
-                        <label>Address *</label>
-                        <textarea id="address" rows="3" placeholder="Enter your complete address" required></textarea>
+                        <label data-i18n="auth.addressLabel">Address *</label>
+                        <textarea id="address" rows="3" data-i18n-placeholder="auth.addressPlaceholder" placeholder="Enter your complete address" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label id="wardLabel">Ward Number *</label>
-                        <input type="text" id="wardNumber" placeholder="e.g., 15" required>
+                        <label id="wardLabel" data-i18n="auth.wardNumberLabel">Ward Number *</label>
+                        <input type="text" id="wardNumber" data-i18n-placeholder="auth.wardNumberPlaceholder" placeholder="e.g., 15" required>
                     </div>
                     <div class="form-group" id="leaderSelectGroup">
-                        <label>Ward Officer *</label>
+                        <label data-i18n="auth.wardOfficerLabel">Ward Officer *</label>
                         <select id="leaderId" required>
-                            <option value="">Select...</option>
+                            <option value="" data-i18n="auth.wardOfficerSelect">Select...</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Complete Registration</button>
+                    <button type="submit" class="btn btn-primary btn-block" data-i18n="auth.registerButton">Complete Registration</button>
                 </form>
             </div>
 
             <div class="auth-footer">
-                <a href="index.html">← Back to Home</a>
+                <a href="index.html" data-i18n="auth.backToHome">← Back to Home</a>
             </div>
 
             <!-- Alert Messages -->
@@ -94,5 +96,49 @@
 
     <script src="js/common.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+        // Add language toggle to login page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Only create toggle if it hasn't been created by lang.js already
+            if (!document.getElementById('langSelect')) {
+                const toggleContainer = document.getElementById('languageToggleTop');
+                if (toggleContainer) {
+                    const currentLang = getLanguage();
+                    const select = document.createElement('select');
+                    select.id = 'langSelect';
+                    select.style.cssText = `
+                        padding: 8px 12px;
+                        border: 2px solid rgba(255,255,255,0.4);
+                        border-radius: 4px;
+                        background-color: rgba(255,255,255,0.15);
+                        color: white;
+                        font-size: 0.95em;
+                        cursor: pointer;
+                        font-weight: 500;
+                    `;
+                    
+                    const enOption = document.createElement('option');
+                    enOption.value = 'en';
+                    enOption.textContent = 'English';
+                    enOption.selected = currentLang === 'en';
+                    select.appendChild(enOption);
+                    
+                    const hiOption = document.createElement('option');
+                    hiOption.value = 'hi';
+                    hiOption.textContent = 'हिंदी';
+                    hiOption.selected = currentLang === 'hi';
+                    select.appendChild(hiOption);
+                    
+                    select.addEventListener('change', (e) => {
+                        setLanguage(e.target.value);
+                    });
+                    
+                    toggleContainer.appendChild(select);
+                }
+            }
+            
+            applyPageTranslations();
+        });
+    </script>
 </body>
 </html>

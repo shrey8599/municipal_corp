@@ -19,12 +19,12 @@ function setupFileUpload() {
         
         for (const file of files) {
             if (file.size > 10 * 1024 * 1024) {
-                showAlert(`File ${file.name} is too large. Max 10MB.`, 'error');
+                showAlert(`File ${file.name} ${t('createTicket.fileTooLarge')}`, 'error');
                 continue;
             }
             
             if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
-                showAlert(`File ${file.name} is not a supported image format.`, 'error');
+                showAlert(`File ${file.name} ${t('createTicket.invalidFormat')}`, 'error');
                 continue;
             }
             
@@ -41,9 +41,9 @@ function setupFileUpload() {
                 `;
                 previewContainer.appendChild(previewItem);
                 
-                showAlert(`${file.name} uploaded successfully`, 'success');
+                showAlert(`${file.name} ${t('createTicket.uploadSuccess')}`, 'success');
             } catch (error) {
-                showAlert(`Failed to upload ${file.name}`, 'error');
+                showAlert(`${t('createTicket.uploadFailed')} ${file.name}`, 'error');
             }
         }
         
@@ -106,13 +106,13 @@ document.getElementById('ticketForm')?.addEventListener('submit', async (e) => {
     
     const user = getUser();
     if (!user || !user.id) {
-        showAlert('User information not found', 'error');
+        showAlert(t('createTicket.userNotFound'), 'error');
         return;
     }
     
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
+    submitBtn.textContent = t('createTicket.submitting');
     
     const ticketData = {
         type: document.getElementById('type').value,
@@ -129,14 +129,40 @@ document.getElementById('ticketForm')?.addEventListener('submit', async (e) => {
         });
         
         if (response.success) {
-            showAlert('Complaint submitted successfully!', 'success');
+            showAlert(t('createTicket.submitSuccess'), 'success');
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
             }, 1500);
         }
     } catch (error) {
-        showAlert(error.message || 'Failed to submit complaint', 'error');
+        showAlert(error.message || t('createTicket.submitFailed'), 'error');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Complaint';
+        submitBtn.textContent = t('createTicket.submit');
     }
 });
+
+// Function to update category options translations when language changes
+window.updateCreateTicketTranslations = function() {
+    const categorySelect = document.getElementById('category');
+    if (categorySelect) {
+        // Update category options
+        const options = categorySelect.querySelectorAll('option');
+        const categoryKeys = ['categoryPlaceholder', 'categoryStreetLights', 'categoryRoads', 'categoryWater', 'categoryGarbage', 'categorySewage', 'categoryParks', 'categoryOthers'];
+        
+        options.forEach((option, index) => {
+            if (index < categoryKeys.length) {
+                const key = categoryKeys[index];
+                option.textContent = t(`createTicket.${key}`);
+            }
+        });
+    }
+    
+    // Update submit button
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn && !submitBtn.disabled) {
+        submitBtn.textContent = t('createTicket.submit');
+    }
+    
+    // Apply all page translations
+    applyPageTranslations();
+};

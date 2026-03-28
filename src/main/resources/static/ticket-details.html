@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complaint Details - Municipal Corporation</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/lang.js"></script>
     <style>
         /* Image Viewer Modal */
         .image-viewer-modal {
@@ -63,12 +64,17 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
+            <button id="hamburger-menu-btn" title="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-brand">
                 <h2>🏛️ Municipal Corp</h2>
             </div>
             <div class="nav-menu">
                 <span id="userName" class="user-name"></span>
-                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+                <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="nav.logout">Logout</button>
             </div>
         </div>
     </nav>
@@ -76,19 +82,19 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="dashboard.html">📊 Dashboard</a></li>
-                <li id="newComplaintLink"><a href="create-ticket.html">➕ New Complaint</a></li>
-                <li class="active"><a href="my-tickets.html">📋 My Complaints</a></li>
-                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
-                <li><a href="profile.html">👤 Profile</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.dashboard">📊 Dashboard</a></li>
+                <li id="newComplaintLink"><a href="create-ticket.html" data-i18n="nav.newComplaint">➕ New Complaint</a></li>
+                <li id="myComplaintsLink"><a href="my-tickets.html" data-i18n="nav.myComplaints">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html" data-i18n="nav.contactOfficer">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html" data-i18n="nav.profile">👤 Profile</a></li>
             </ul>
         </aside>
 
         <main class="main-content">
             <div class="ticket-details-container">
                 <!-- Back Button -->
-                <button onclick="window.location.href='my-tickets.html'" class="btn btn-secondary btn-sm">
-                    ← Back to Tickets
+                <button onclick="window.location.href='my-tickets.html'" class="btn btn-secondary btn-sm" data-i18n="ticketDetails.back">
+                    ← Back to Complaints
                 </button>
 
                 <!-- Ticket Header -->
@@ -108,12 +114,12 @@
 
                 <!-- Leader Actions (visible only to leaders) -->
                 <div id="leaderActions" class="section" style="display: none;">
-                    <h3>⚙️ Leader Actions</h3>
+                    <h3 data-i18n="ticketDetails.leaderActions">⚙️ Leader Actions</h3>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
-                        <button onclick="updateStatus('IN_PROGRESS')" class="btn btn-warning btn-sm">
+                        <button onclick="updateStatus('IN_PROGRESS')" class="btn btn-warning btn-sm" data-i18n="ticketDetails.markInProgress">
                             ⏳ Mark In Progress
                         </button>
-                        <button onclick="updateStatus('RESOLVED')" class="btn btn-success btn-sm">
+                        <button onclick="updateStatus('RESOLVED')" class="btn btn-success btn-sm" data-i18n="ticketDetails.markResolved">
                             ✅ Mark Resolved
                         </button>
                     </div>
@@ -121,19 +127,20 @@
 
                 <!-- Comments Section -->
                 <div class="comments-section">
-                    <h3>💬 Comments & Updates</h3>
+                    <h3 data-i18n="ticketDetails.comments">💬 Comments & Updates</h3>
                     <div id="commentsContainer" class="comments-container">
                         <!-- Will be populated by JS -->
                     </div>
 
                     <!-- Add Comment Form -->
                     <div class="add-comment-form">
-                        <h4>Add a Comment</h4>
+                        <h4 data-i18n="ticketDetails.addComment">Add a Comment</h4>
                         <form id="commentForm">
                             <textarea id="commentText" rows="3" 
+                                      data-i18n-placeholder="ticketDetails.placeholderComment"
                                       placeholder="Add your comment or update..." 
                                       required></textarea>
-                            <button type="submit" class="btn btn-primary">Post Comment</button>
+                            <button type="submit" class="btn btn-primary" data-i18n="ticketDetails.postComment">Post Comment</button>
                         </form>
                     </div>
                 </div>

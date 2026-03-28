@@ -1,5 +1,6 @@
 // Common utility functions and API configuration
-const API_BASE_URL = 'http://localhost:9999/api';
+// Dynamic API base URL - works with any port
+const API_BASE_URL = `${window.location.protocol}//${window.location.host}/api`;
 const TOKEN_KEY = 'municipal_token';
 const USER_KEY = 'municipal_user';
 
@@ -86,8 +87,30 @@ function showAlert(message, type = 'success') {
 
 // Format date
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Handle ISO 8601 format - server sends in UTC
+    // Append Z to ensure UTC parsing, then convert to local timezone for display
+    let dateStr = dateString;
+    if (!dateStr.endsWith('Z') && !dateStr.includes('+') && !dateStr.includes('-00:')) {
+        dateStr = dateString + 'Z'; // Add Z to indicate UTC if not already present
+    }
+    
+    const date = new Date(dateStr);
+    
+    if (isNaN(date.getTime())) {
+        return dateString; // Return original if parsing fails
+    }
+    
+    // Format in local timezone
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+    
+    return new Intl.DateTimeFormat(undefined, options).format(date);
 }
 
 // Format status badge
@@ -137,12 +160,67 @@ function requireAuth() {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if page requires authentication
-    const currentPage = window.location.pathname.split('/').pop();
-    const authPages = ['dashboard.html', 'create-ticket.html', 'ticket-details.html'];
-    
-    if (authPages.includes(currentPage)) {
-        if (!requireAuth()) return;
+    // Always initialize user display on protected pages
+    if (isAuthenticated()) {
         initUserDisplay();
     }
+    
+    // Initialize hamburger menu toggle
+    initHamburgerMenu();
 });
+
+// Hamburger Menu Toggle Function
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const container = document.querySelector('.dashboard-container');
+    if (sidebar) {
+        sidebar.classList.toggle('mobile-open');
+        if (container) {
+            container.classList.toggle('sidebar-open');
+        }
+    }
+}
+
+// Close sidebar when link is clicked
+function closeSidebarOnNavigation() {
+    const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            const container = document.querySelector('.dashboard-container');
+            if (sidebar) {
+                sidebar.classList.remove('mobile-open');
+            }
+            if (container) {
+                container.classList.remove('sidebar-open');
+            }
+        });
+    });
+}
+
+// Initialize hamburger menu
+function initHamburgerMenu() {
+    const hamburgerBtn = document.getElementById('hamburger-menu-btn');
+    if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', toggleSidebar);
+    }
+    
+    // Close sidebar when links are clicked
+    closeSidebarOnNavigation();
+    
+    // Close sidebar when clicking outside of it on mobile
+    document.addEventListener('click', (e) => {
+        const sidebar = document.querySelector('.sidebar');
+        const hamburgerBtn = document.getElementById('hamburger-menu-btn');
+        const container = document.querySelector('.dashboard-container');
+        
+        if (sidebar && hamburgerBtn && window.innerWidth <= 768) {
+            if (!sidebar.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                sidebar.classList.remove('mobile-open');
+                if (container) {
+                    container.classList.remove('sidebar-open');
+                }
+            }
+        }
+    });
+}

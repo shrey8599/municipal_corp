@@ -5,16 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Complaints - Municipal Corporation</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/lang.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
+            <button id="hamburger-menu-btn" title="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="nav-brand">
                 <h2>🏛️ Municipal Corp</h2>
             </div>
             <div class="nav-menu">
                 <span id="userName" class="user-name"></span>
-                <button onclick="logout()" class="btn btn-secondary btn-sm">Logout</button>
+                <button onclick="logout()" class="btn btn-secondary btn-sm" data-i18n="nav.logout">Logout</button>
             </div>
         </div>
     </nav>
@@ -22,21 +28,31 @@
     <div class="dashboard-container">
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="dashboard.html">📊 Dashboard</a></li>
-                <li id="newComplaintLink"><a href="create-ticket.html">➕ New Complaint</a></li>
-                <li class="active"><a href="my-tickets.html">📋 My Complaints</a></li>
-                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html">📞 Contact Ward Officer</a></li>
-                <li><a href="profile.html">👤 Profile</a></li>
+                <li><a href="dashboard.html" data-i18n="nav.dashboard">📊 Dashboard</a></li>
+                <li id="newComplaintLink"><a href="create-ticket.html" data-i18n="nav.newComplaint">➕ New Complaint</a></li>
+                <li class="active"><a href="my-tickets.html" data-i18n="nav.myComplaints">📋 My Complaints</a></li>
+                <li id="contactLeaderLink" style="display: none;"><a href="contact-leader.html" data-i18n="nav.contactOfficer">📞 Contact Ward Officer</a></li>
+                <li><a href="profile.html" data-i18n="nav.profile">👤 Profile</a></li>
             </ul>
         </aside>
 
         <main class="main-content">
             <!-- Dashboard Stats -->
             <div class="dashboard-header">
-                <h1>My Complaints</h1>
-                <a href="create-ticket.html" class="btn btn-primary" id="fileNewBtn">
+                <h1 data-i18n="tickets.title">My Complaints</h1>
+                <a href="create-ticket.html" class="btn btn-primary" id="fileNewBtn" data-i18n="tickets.fileNew">
                     ➕ File New Complaint
                 </a>
+            </div>
+
+            <!-- Citizen-Only Notice -->
+            <div id="citizenNotice" style="display: none; margin-bottom: 20px; padding: 18px 22px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-left: 6px solid #d32f2f; border-radius: 6px; box-shadow: 0 2px 8px rgba(211, 47, 47, 0.15);">
+                <strong style="color: #b71c1c; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 1.1em;">
+                    ⚠️ <span id="noticeTitle" data-i18n="tickets.notice">Please Submit Complaints Responsibly</span>
+                </strong>
+                <p id="noticeText" data-i18n="tickets.noticeText" style="margin: 0; color: #ba000d; line-height: 1.7; font-size: 0.96em; font-weight: 500;">
+                    We encourage you to submit complaints only when necessary. Please take time to review existing processes and communicate directly with your ward officer when possible. Excessive or duplicate complaints can strain the municipal system and delay assistance to those who need it most. Together, let's work efficiently to maintain our community.
+                </p>
             </div>
 
             <div class="stats-row">
@@ -44,28 +60,28 @@
                     <div class="stat-icon open">📝</div>
                     <div class="stat-content">
                         <h3 id="openCount">0</h3>
-                        <p>Open Complaints</p>
+                        <p data-i18n="tickets.openComplaints">Open Complaints</p>
                     </div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-icon progress">⏳</div>
                     <div class="stat-content">
                         <h3 id="inProgressCount">0</h3>
-                        <p>In Progress</p>
+                        <p data-i18n="tickets.inProgressComplaints">In Progress</p>
                     </div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-icon resolved">✅</div>
                     <div class="stat-content">
                         <h3 id="resolvedCount">0</h3>
-                        <p>Resolved</p>
+                        <p data-i18n="tickets.resolvedComplaints">Resolved</p>
                     </div>
                 </div>
                 <div class="stat-box">
                     <div class="stat-icon total">📊</div>
                     <div class="stat-content">
                         <h3 id="totalCount">0</h3>
-                        <p>Total Complaints</p>
+                        <p data-i18n="tickets.totalComplaints">Total Complaints</p>
                     </div>
                 </div>
             </div>
@@ -73,8 +89,8 @@
             <!-- Tickets List -->
             <div class="section">
                 <div class="section-header">
-                    <h2 id="sectionTitle">Recent Complaints</h2>
-                    <button onclick="loadTickets()" class="btn btn-secondary btn-sm">🔄 Refresh</button>
+                    <h2 id="sectionTitle" data-i18n="tickets.recent">Recent Complaints</h2>
+                    <button onclick="loadTickets()" class="btn btn-secondary btn-sm" data-i18n="tickets.refresh">🔄 Refresh</button>
                 </div>
                 <div id="ticketsContainer" class="tickets-container">
                     <div class="loading">Loading complaints...</div>
