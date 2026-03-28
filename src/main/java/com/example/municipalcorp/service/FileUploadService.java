@@ -55,18 +55,39 @@ public class FileUploadService {
         // Validate file
         validateFile(file);
         
-        // Generate unique filename
+        // Generate unique filename with proper extension
         String originalFilename = file.getOriginalFilename();
-        String extension = originalFilename != null && originalFilename.contains(".") 
-            ? originalFilename.substring(originalFilename.lastIndexOf("."))
-            : ".jpg";
+        String extension = ".jpg";  // Default extension
+        
+        if (originalFilename != null && originalFilename.contains(".")) {
+            String ext = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+            // Use the original extension if it's valid
+            if (ALLOWED_EXTENSIONS.contains(ext)) {
+                extension = ext;
+            } else {
+                // For files without extension or invalid extension, determine from MIME type
+                String contentType = file.getContentType();
+                if (contentType != null) {
+                    contentType = contentType.toLowerCase();
+                    if (contentType.contains("png")) {
+                        extension = ".png";
+                    } else if (contentType.contains("webp")) {
+                        extension = ".webp";
+                    } else if (contentType.contains("gif")) {
+                        extension = ".gif";
+                    }
+                    // default to .jpg for any JPEG type
+                }
+            }
+        }
+        
         String filename = UUID.randomUUID().toString() + extension;
         
         // Save file
         Path targetLocation = Paths.get(uploadDir).resolve(filename);
-        Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+        long bytesCopied = Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         
-        log.info("File uploaded successfully: {}", filename);
+        log.info("File uploaded successfully: {} ({}bytes, extension: {})", filename, bytesCopied, extension);
         
         // Return URL path
         return "/" + uploadDir + "/" + filename;

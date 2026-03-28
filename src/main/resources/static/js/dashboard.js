@@ -377,16 +377,42 @@ async function submitNews(event) {
     const imageFiles = document.getElementById('newsImages').files;
     
     let imageUrls = [];
+    let uploadErrors = [];
     
     // Upload images if provided
     if (imageFiles && imageFiles.length > 0) {
+        console.log(`Starting upload of ${imageFiles.length} file(s)`);
+        
         for (let i = 0; i < imageFiles.length; i++) {
             const imageFile = imageFiles[i];
+            console.log(`File ${i}: name=${imageFile.name}, size=${imageFile.size}, type=${imageFile.type}`);
+            
+            // Validate file before upload
+            if (imageFile.size === 0) {
+                uploadErrors.push(`File ${imageFile.name} is empty`);
+                continue;
+            }
+            
+            const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+            const fileExtension = imageFile.name.substring(imageFile.name.lastIndexOf('.')).toLowerCase();
+            const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+            
+            // Check if file type is valid by MIME or extension
+            const isValidType = validImageTypes.includes(imageFile.type) || validExtensions.includes(fileExtension);
+            
+            if (!isValidType) {
+                console.warn(`Invalid file type: ${imageFile.type} for ${imageFile.name}`);
+                uploadErrors.push(`File ${imageFile.name} has invalid type. Expected image (JPEG, PNG, WebP, GIF). Got: ${imageFile.type || 'unknown'}`);
+                continue;
+            }
+            
             const formData = new FormData();
             formData.append('file', imageFile);
             
             try {
                 const token = getToken();
+                console.log(`Uploading file: ${imageFile.name}`);
+                
                 const uploadResponse = await fetch('/api/files/upload', {
                     method: 'POST',
                     headers: {
@@ -395,15 +421,29 @@ async function submitNews(event) {
                     body: formData
                 });
                 
-                if (uploadResponse.ok) {
-                    const uploadResult = await uploadResponse.json();
-                    if (uploadResult.success) {
-                        imageUrls.push(uploadResult.data.url);
-                    }
+                console.log(`Upload response status: ${uploadResponse.status}`);
+                
+                const uploadResult = await uploadResponse.json();
+                console.log(`Upload result:`, uploadResult);
+                
+                if (uploadResponse.ok && uploadResult.success) {
+                    imageUrls.push(uploadResult.data.url);
+                    console.log(`✅ File uploaded successfully: ${uploadResult.data.url}`);
+                } else {
+                    const errorMsg = uploadResult.message || 'Unknown error';
+                    uploadErrors.push(`Upload failed for ${imageFile.name}: ${errorMsg}`);
+                    console.error(`Upload failed: ${errorMsg}`);
                 }
             } catch (error) {
+                const errorMsg = error.message || 'Network error';
+                uploadErrors.push(`Network error uploading ${imageFile.name}: ${errorMsg}`);
                 console.error('Failed to upload image:', error);
             }
+        }
+        
+        // Show upload errors if any
+        if (uploadErrors.length > 0) {
+            showAlert(`⚠️ Upload Issues:\n${uploadErrors.join('\n')}`, 'warning');
         }
     }
     
