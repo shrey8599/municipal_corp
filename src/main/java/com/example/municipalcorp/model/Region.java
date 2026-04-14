@@ -39,14 +39,17 @@ public class Region {
 
     // MP / MLA — city-specific
     private String mlaName;
+    @Lob
     private String mlaImageUrl;
 
     // Chief Minister — state-level (auto-propagated to all cities in same state on save)
     private String cmName;
+    @Lob
     private String cmImageUrl;
 
     // Prime Minister — national (auto-propagated to all regions on save)
     private String pmName;
+    @Lob
     private String pmImageUrl;
 
     @UpdateTimestamp

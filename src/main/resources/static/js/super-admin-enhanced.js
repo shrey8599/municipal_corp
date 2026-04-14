@@ -876,7 +876,32 @@ async function loadSystemImageSettings() {
     }
 }
 
-// Upload a settings image file and store the returned URL
+// Compress an image File to a base64 JPEG data URL using canvas
+function compressImageToBase64(file, maxWidth, maxHeight, quality) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        img.onload = () => {
+            URL.revokeObjectURL(objectUrl);
+            let w = img.width;
+            let h = img.height;
+            if (w > maxWidth || h > maxHeight) {
+                const ratio = Math.min(maxWidth / w, maxHeight / h);
+                w = Math.round(w * ratio);
+                h = Math.round(h * ratio);
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = objectUrl;
+    });
+}
+
+// Upload a settings image — compresses client-side and stores as base64 (no server file needed)
 async function previewAndUploadSettingsImage(inputId, previewId, settingKey, scope) {
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
@@ -898,36 +923,24 @@ async function previewAndUploadSettingsImage(inputId, previewId, settingKey, sco
         if (!confirmed) { input.value = ''; return; }
     }
 
-    // Show local preview immediately
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-    };
-    reader.readAsDataURL(input.files[0]);
-
-    // Upload to server
-    const formData = new FormData();
-    formData.append('file', input.files[0]);
-
     try {
-        const response = await fetch(`${API_BASE}/files/upload`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${jwtToken}` },
-            body: formData
-        });
-        const result = await response.json();
-        if (result.success) {
-            settingImageUrls[settingKey] = result.data.url;
-            // Show the remove button wrapper now that an image is set
-            const keyPrefix = settingKey.replace('ImageUrl', '');
-            const wrap = document.getElementById(keyPrefix + 'ImagePreviewWrap');
-            if (wrap) { wrap.style.display = 'block'; }
-        } else {
-            showAlert('settingsAlert', '⚠ Image upload failed. Please try again.', 'error');
+        // Compress to max 400×500 at JPEG 70% — keeps file small enough for DB storage
+        const base64Url = await compressImageToBase64(input.files[0], 400, 500, 0.7);
+
+        // Show preview
+        if (preview) {
+            preview.src = base64Url;
+            preview.style.display = 'block';
         }
+
+        // Store in memory — no server upload needed
+        settingImageUrls[settingKey] = base64Url;
+
+        const keyPrefix = settingKey.replace('ImageUrl', '');
+        const wrap = document.getElementById(keyPrefix + 'ImagePreviewWrap');
+        if (wrap) { wrap.style.display = 'block'; }
     } catch (err) {
-        showAlert('settingsAlert', '⚠ Upload error: ' + err.message, 'error');
+        showAlert('settingsAlert', '⚠ Image processing failed: ' + err.message, 'error');
     }
 }
 
