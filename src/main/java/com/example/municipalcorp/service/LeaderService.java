@@ -83,6 +83,8 @@ public class LeaderService {
         existing.setEmail(leaderData.getEmail());
         existing.setJurisdiction(leaderData.getJurisdiction());
         existing.setDesignation(leaderData.getDesignation());
+        if (leaderData.getState() != null) existing.setState(leaderData.getState());
+        if (leaderData.getCity() != null)  existing.setCity(leaderData.getCity());
         
         return leaderRepository.save(existing);
     }
