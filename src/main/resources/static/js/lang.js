@@ -945,6 +945,18 @@ function applyPageTranslations() {
 function initializeLanguageSystem() {
     // Add CSS for language toggle if not already present
     if (!document.getElementById('langToggleStyles')) {
+        // Detect if we're on a page with a white/light sidebar (super-admin dashboard)
+        // vs. a page where the toggle floats over a dark background (login, index)
+        const onLightSidebar = !!document.querySelector('.sidebar');
+
+        const textColor       = onLightSidebar ? '#3E2723'              : 'white';
+        const bgColor         = onLightSidebar ? '#FFF8F0'              : 'rgba(255,255,255,0.15)';
+        const bgHoverColor    = onLightSidebar ? '#ffe8d6'              : 'rgba(255,255,255,0.25)';
+        const borderColor     = onLightSidebar ? '#E8D5C4'              : 'rgba(255,255,255,0.4)';
+        const borderHover     = onLightSidebar ? '#D97642'              : 'rgba(255,255,255,0.6)';
+        const borderRadius    = onLightSidebar ? '6px'                  : '4px';
+        const borderWidth     = onLightSidebar ? '1.5px solid'          : '2px solid';
+
         const style = document.createElement('style');
         style.id = 'langToggleStyles';
         style.textContent = `
@@ -955,10 +967,10 @@ function initializeLanguageSystem() {
             }
             #langSelect {
                 padding: 8px 12px !important;
-                border: 2px solid rgba(255,255,255,0.4) !important;
-                border-radius: 4px !important;
-                background-color: rgba(255,255,255,0.15) !important;
-                color: white !important;
+                border: ${borderWidth} ${borderColor} !important;
+                border-radius: ${borderRadius} !important;
+                background-color: ${bgColor} !important;
+                color: ${textColor} !important;
                 font-size: 0.95em !important;
                 cursor: pointer !important;
                 font-family: inherit !important;
@@ -967,8 +979,8 @@ function initializeLanguageSystem() {
                 transition: all 0.3s ease !important;
             }
             #langSelect:hover {
-                background-color: rgba(255,255,255,0.25) !important;
-                border-color: rgba(255,255,255,0.6) !important;
+                background-color: ${bgHoverColor} !important;
+                border-color: ${borderHover} !important;
             }
             #langSelect option {
                 color: #333 !important;
