@@ -901,7 +901,8 @@ function compressImageToBase64(file, maxWidth, maxHeight, quality) {
     });
 }
 
-// Upload a settings image — uploads to server and stores the returned file URL path
+// Upload a settings image — compresses client-side to base64 and stores in DB (no server file needed)
+// Base64 ~15-25 KB stays in DB as LONGTEXT; works on Railway and any deployment without filesystem
 async function previewAndUploadSettingsImage(inputId, previewId, settingKey, scope) {
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
@@ -923,43 +924,24 @@ async function previewAndUploadSettingsImage(inputId, previewId, settingKey, sco
         if (!confirmed) { input.value = ''; return; }
     }
 
-    const file = input.files[0];
-
-    // Show local preview immediately while uploading
-    if (preview) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-    }
-    const keyPrefix = settingKey.replace('ImageUrl', '');
-    const wrap = document.getElementById(keyPrefix + 'ImagePreviewWrap');
-    if (wrap) { wrap.style.display = 'block'; }
-
     try {
-        const formData = new FormData();
-        formData.append('file', file);
+        // Compress to max 250×312 at JPEG 65% — ~15-25 KB as base64, well within DB LONGTEXT limit
+        const base64Url = await compressImageToBase64(input.files[0], 250, 312, 0.65);
 
-        const resp = await fetch(`${API_BASE}/files/upload`, {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${jwtToken}` },
-            body: formData
-        });
-        const result = await resp.json();
-
-        if (result.success && result.data && result.data.url) {
-            settingImageUrls[settingKey] = result.data.url;
-        } else {
-            showAlert('settingsAlert', '⚠ Image upload failed: ' + (result.message || 'Server error'), 'error');
-            if (preview) { preview.src = ''; preview.style.display = 'none'; }
-            if (wrap) { wrap.style.display = 'none'; }
-            settingImageUrls[settingKey] = null;
-            input.value = '';
+        // Show preview
+        if (preview) {
+            preview.src = base64Url;
+            preview.style.display = 'block';
         }
+
+        // Store base64 data URI in memory — saved directly to DB on Save Settings click
+        settingImageUrls[settingKey] = base64Url;
+
+        const keyPrefix = settingKey.replace('ImageUrl', '');
+        const wrap = document.getElementById(keyPrefix + 'ImagePreviewWrap');
+        if (wrap) { wrap.style.display = 'block'; }
     } catch (err) {
-        showAlert('settingsAlert', '⚠ Image upload failed: ' + err.message, 'error');
-        if (preview) { preview.src = ''; preview.style.display = 'none'; }
-        if (wrap) { wrap.style.display = 'none'; }
-        settingImageUrls[settingKey] = null;
-        input.value = '';
+        showAlert('settingsAlert', '⚠ Image processing failed: ' + err.message, 'error');
     }
 }
 

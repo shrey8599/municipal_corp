@@ -16,8 +16,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Serve uploaded files from the uploads directory
+        // Ensure trailing slash so Spring can resolve files within the directory
         String uploadPath = Paths.get(uploadDir).toAbsolutePath().toUri().toString();
-        
+        if (!uploadPath.endsWith("/")) {
+            uploadPath += "/";
+        }
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations(uploadPath);
     }
