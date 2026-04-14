@@ -901,7 +901,7 @@ function compressImageToBase64(file, maxWidth, maxHeight, quality) {
     });
 }
 
-// Upload a settings image — compresses client-side and stores as base64 (no server file needed)
+// Upload a settings image — uploads to server and stores the returned file URL path
 async function previewAndUploadSettingsImage(inputId, previewId, settingKey, scope) {
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
@@ -923,24 +923,43 @@ async function previewAndUploadSettingsImage(inputId, previewId, settingKey, sco
         if (!confirmed) { input.value = ''; return; }
     }
 
+    const file = input.files[0];
+
+    // Show local preview immediately while uploading
+    if (preview) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    }
+    const keyPrefix = settingKey.replace('ImageUrl', '');
+    const wrap = document.getElementById(keyPrefix + 'ImagePreviewWrap');
+    if (wrap) { wrap.style.display = 'block'; }
+
     try {
-        // Compress to max 250×312 at JPEG 65% — keeps base64 small enough for reliable DB storage (~15-25KB)
-        const base64Url = await compressImageToBase64(input.files[0], 250, 312, 0.65);
+        const formData = new FormData();
+        formData.append('file', file);
 
-        // Show preview
-        if (preview) {
-            preview.src = base64Url;
-            preview.style.display = 'block';
+        const resp = await fetch(`${API_BASE}/files/upload`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${jwtToken}` },
+            body: formData
+        });
+        const result = await resp.json();
+
+        if (result.success && result.data && result.data.url) {
+            settingImageUrls[settingKey] = result.data.url;
+        } else {
+            showAlert('settingsAlert', '⚠ Image upload failed: ' + (result.message || 'Server error'), 'error');
+            if (preview) { preview.src = ''; preview.style.display = 'none'; }
+            if (wrap) { wrap.style.display = 'none'; }
+            settingImageUrls[settingKey] = null;
+            input.value = '';
         }
-
-        // Store in memory — no server upload needed
-        settingImageUrls[settingKey] = base64Url;
-
-        const keyPrefix = settingKey.replace('ImageUrl', '');
-        const wrap = document.getElementById(keyPrefix + 'ImagePreviewWrap');
-        if (wrap) { wrap.style.display = 'block'; }
     } catch (err) {
-        showAlert('settingsAlert', '⚠ Image processing failed: ' + err.message, 'error');
+        showAlert('settingsAlert', '⚠ Image upload failed: ' + err.message, 'error');
+        if (preview) { preview.src = ''; preview.style.display = 'none'; }
+        if (wrap) { wrap.style.display = 'none'; }
+        settingImageUrls[settingKey] = null;
+        input.value = '';
     }
 }
 
