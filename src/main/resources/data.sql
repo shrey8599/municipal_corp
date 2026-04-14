@@ -2,20 +2,20 @@
 -- This script contains the current test data state
 
 -- Leaders
-INSERT INTO leaders (id, phone, name, email, jurisdiction, designation, active, created_at, updated_at) VALUES
-(1, '1111111111', 'Ward Officer - Ward 5', 'officer.ward5@municipal.gov', '5', 'Ward Officer', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO leaders (id, phone, name, email, jurisdiction, designation, active, created_at, updated_at) VALUES
-(2, '3333333333', 'Ward Officer - Ward 10', 'officer.ward10@municipal.gov', '10', 'Ward Officer', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO leaders (id, phone, name, email, jurisdiction, designation, state, city, active, created_at, updated_at) VALUES
+(1, '1111111111', 'Ward Officer - Ward 5', 'officer.ward5@municipal.gov', '5', 'Ward Officer', 'Rajasthan', 'Kota', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO leaders (id, phone, name, email, jurisdiction, designation, state, city, active, created_at, updated_at) VALUES
+(2, '3333333333', 'Ward Officer - Ward 10', 'officer.ward10@municipal.gov', '10', 'Ward Officer', 'Rajasthan', 'Jaipur', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Users (Citizens)
-INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, active, created_at, updated_at) VALUES
-(1, '2222222222', 'Test Citizen', 'citizen1@test.com', '123 Main Street', '5', 'CITIZEN', 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, active, created_at, updated_at) VALUES
-(2, '5555555555', 'John Doe', 'john.doe@test.com', '456 Park Avenue', '5', 'CITIZEN', 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, active, created_at, updated_at) VALUES
-(3, '6666666666', 'Jane Smith', 'jane.smith@test.com', '789 Oak Road', '10', 'CITIZEN', 2, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, active, created_at, updated_at) VALUES
-(4, '7777777777', 'Bob Johnson', 'bob.johnson@test.com', '321 Elm Street', '10', 'CITIZEN', 2, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, state, city, active, created_at, updated_at) VALUES
+(1, '2222222222', 'Test Citizen', 'citizen1@test.com', '123 Main Street', '5', 'CITIZEN', 1, 'Rajasthan', 'Kota', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, state, city, active, created_at, updated_at) VALUES
+(2, '5555555555', 'John Doe', 'john.doe@test.com', '456 Park Avenue', '5', 'CITIZEN', 1, 'Rajasthan', 'Kota', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, state, city, active, created_at, updated_at) VALUES
+(3, '6666666666', 'Jane Smith', 'jane.smith@test.com', '789 Oak Road', '10', 'CITIZEN', 2, 'Rajasthan', 'Jaipur', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO users (id, phone, name, email, address, ward_number, role, leader_id, state, city, active, created_at, updated_at) VALUES
+(4, '7777777777', 'Bob Johnson', 'bob.johnson@test.com', '321 Elm Street', '10', 'CITIZEN', 2, 'Rajasthan', 'Jaipur', true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Tickets (Complaints)
 INSERT INTO tickets (id, ticket_id, title, description, type, category, status, citizen_id, leader_id, created_at, updated_at, closed_at, resolution_note) VALUES

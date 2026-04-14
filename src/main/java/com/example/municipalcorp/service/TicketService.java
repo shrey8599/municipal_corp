@@ -209,6 +209,11 @@ public class TicketService {
             .collect(Collectors.toList());
     }
     
+    public List<TicketResponseDTO> getAllTickets() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        return tickets.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+    
     private TicketResponseDTO convertToDTO(Ticket ticket) {
         // Fetch citizen info fresh from database by ID (ensures latest data)
         User citizen = userService.getUserById(ticket.getCitizen().getId());

@@ -34,6 +34,15 @@ public class LeaderController {
         
         return ResponseEntity.ok(ApiResponse.success("Leaders retrieved successfully", leaders));
     }
+
+    @GetMapping("/by-city")
+    public ResponseEntity<ApiResponse<List<Leader>>> getLeadersByCity(
+            @RequestParam String state,
+            @RequestParam String city) {
+        log.info("Fetching leaders for state={}, city={}", state, city);
+        List<Leader> leaders = leaderService.getLeadersByCity(state, city);
+        return ResponseEntity.ok(ApiResponse.success("Leaders retrieved successfully", leaders));
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Leader>> getLeaderById(@PathVariable Long id) {

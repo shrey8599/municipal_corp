@@ -337,6 +337,44 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 30px;
 }
 
+/* Admin Section */
+.admin-section {
+    padding: 40px 20px;
+    text-align: center;
+    background: var(--light-bg);
+    border-top: 2px solid var(--border-color);
+}
+
+.admin-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: white;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.admin-icon {
+    font-size: 18px;
+}
+
+.admin-text {
+    font-weight: 600;
+}
+
 /* Footer */
 footer {
     background: #2c3e50;

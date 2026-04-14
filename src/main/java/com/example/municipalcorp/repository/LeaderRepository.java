@@ -13,4 +13,7 @@ public interface LeaderRepository extends JpaRepository<Leader, Long> {
     Optional<Leader> findByEmail(String email);
     List<Leader> findByActiveTrue();
     List<Leader> findByJurisdiction(String jurisdiction);
+    List<Leader> findByStateAndCityAndActiveTrue(String state, String city);
+    boolean existsByPhone(String phone);
+    boolean existsByEmail(String email);
 }

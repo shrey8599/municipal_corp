@@ -75,11 +75,24 @@
                         <label id="wardLabel" data-i18n="auth.wardNumberLabel">Ward Number *</label>
                         <input type="text" id="wardNumber" data-i18n-placeholder="auth.wardNumberPlaceholder" placeholder="e.g., 15" required>
                     </div>
-                    <div class="form-group" id="leaderSelectGroup">
+                    <div class="form-group">
+                        <label>State *</label>
+                        <select id="regState" required onchange="onRegStateChange()">
+                            <option value="">Select your state...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>City *</label>
+                        <select id="regCity" required onchange="onRegCityChange()">
+                            <option value="">Select your city...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="leaderSelectGroup" style="display:none;">
                         <label data-i18n="auth.wardOfficerLabel">Ward Officer *</label>
                         <select id="leaderId" required>
                             <option value="" data-i18n="auth.wardOfficerSelect">Select...</option>
                         </select>
+                        <small id="leaderHelp" style="color:var(--text-muted,#888);margin-top:4px;display:block;"></small>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" data-i18n="auth.registerButton">Complete Registration</button>
                 </form>

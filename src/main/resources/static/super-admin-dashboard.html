@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Dashboard - Municipal Corp</title>
+    <style>
+        :root {
+            --primary-color: #D97642;        /* Warm terracotta/saffron */
+            --secondary-color: #2A9D8F;      /* Teal/turquoise */
+            --accent-color: #C9A961;         /* Golden ochre */
+            --success-color: #2E7D32;        /* Warm green */
+            --danger-color: #C62828;         /* Warm red */
+            --warning-color: #F57C00;        /* Warm orange */
+            --info-color: #0277BD;           /* Warm blue */
+            --light-bg: #FFF8F0;             /* Warm ivory/cream */
+            --border-color: #E8D5C4;         /* Warm beige */
+            --text-color: #3E2723;           /* Warm dark brown */
+            --text-muted: #8D6E63;           /* Warm brown */
+            --card-shadow: 0 4px 12px rgba(217, 118, 66, 0.08);
+            --hover-shadow: 0 8px 24px rgba(217, 118, 66, 0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+            color: var(--text-color);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(217, 118, 66, 0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .tab-button {
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--light-bg);
+            border-color: var(--primary-color);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .button-group .btn {
+            flex: 1;
+        }
+        
+        .alert {
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid;
+            line-height: 1.6;
+            white-space: pre-line;
+            word-wrap: break-word;
+        }
+        
+        .alert.show {
+            display: block;
+            animation: slideDown 0.3s ease-in-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: var(--success-color);
+            border-left-color: var(--success-color);
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: var(--danger-color);
+            border-left-color: var(--danger-color);
+            font-weight: 500;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: var(--info-color);
+            border-left-color: var(--info-color);
+            font-weight: 500;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: var(--warning-color);
+            border-left-color: var(--warning-color);
+            font-weight: 500;
+        }
+        
+        .otp-section {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .otp-section label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .back-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            display: inline-block;
+            padding: 8px 0;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .success-message h2 {
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+        
+        .success-message p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .success-message strong {
+            color: var(--text-color);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Login Tab -->
+            <div id="loginTab" class="tab-content active">
+                <div class="header">
+                    <div class="header-icon">⚙️</div>
+                    <h1>Super Admin</h1>
+                    <p>Manage Ward Officers</p>
+                </div>
+                
+                <div id="loginAlert" class="alert"></div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginPhone">Phone Number or Email</label>
+                        <input type="text" id="loginPhone" placeholder="Enter phone or email" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Send OTP</button>
+                </form>
+            </div>
+            
+            <!-- OTP Verification Tab -->
+            <div id="otpTab" class="tab-content">
+                <div class="header">
+                    <div class="header-icon">✓</div>
+                    <h1>Verify OTP</h1>
+                    <p id="otpIdentifier"></p>
+                </div>
+                
+                <div id="otpAlert" class="alert"></div>
+                
+                <form id="otpForm">
+                    <div class="otp-section">
+                        <label for="otpInput">Enter 6-digit OTP</label>
+                        <input type="text" id="otpInput" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Check your phone/email for the OTP</p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Verify OTP</button>
+                    <a href="#" id="resendOtp" class="back-link">Resend OTP</a>
+                </form>
+            </div>
+            
+            <!-- Dashboard Tab -->
+            <div id="dashboardTab" class="tab-content">
+                <div class="header">
+                    <div class="header-icon">📋</div>
+                    <h1>Register Ward Officer</h1>
+                    <p id="adminName"></p>
+                </div>
+                
+                <div id="dashboardAlert" class="alert"></div>
+                
+                <form id="leaderForm">
+                    <div class="form-group">
+                        <label for="leaderName">Ward Officer Name *</label>
+                        <input type="text" id="leaderName" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderPhone">Phone Number *</label>
+                        <input type="tel" id="leaderPhone" placeholder="Enter 10-digit phone number" pattern="[0-9]{10}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderEmail">Email Address</label>
+                        <input type="email" id="leaderEmail" placeholder="Enter email (optional)">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderJurisdiction">Ward Number *</label>
+                        <input type="text" id="leaderJurisdiction" placeholder="e.g., Ward 5, North Zone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderDesignation">Designation *</label>
+                        <select id="leaderDesignation" required>
+                            <option value="">Select Designation</option>
+                            <option value="Ward Officer">Ward Officer</option>
+                            <option value="Deputy Ward Officer">Deputy Ward Officer</option>
+                            <option value="Area Coordinator">Area Coordinator</option>
+                            <option value="Community Manager">Community Manager</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Register Ward Officer</button>
+                </form>
+                
+                <div class="button-group" style="margin-top: 15px;">
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <!-- Success Tab -->
+            <div id="successTab" class="tab-content">
+                <div class="success-message">
+                    <div class="header-icon">✅</div>
+                    <h2>Ward Officer Registered</h2>
+                    <p>The ward officer profile has been created and is now active.</p>
+                    <p><strong>Name:</strong> <span id="successName"></span></p>
+                    <p><strong>Phone:</strong> <span id="successPhone"></span></p>
+                    <p><strong>Ward Number:</strong> <span id="successJurisdiction"></span></p>
+                    <button class="btn btn-primary" onclick="resetForm()">Register Another</button>
+                    <button class="btn btn-secondary" onclick="logout()" style="margin-top: 10px;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/super-admin.js"></script>
+</body>
+</html>

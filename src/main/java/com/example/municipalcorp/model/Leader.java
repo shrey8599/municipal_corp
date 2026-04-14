@@ -38,10 +38,21 @@ public class Leader {
     @NotBlank(message = "Jurisdiction is required")
     private String jurisdiction; // Ward or area
     
+    private String state; // State like Rajasthan, Maharashtra, etc.
+    
+    private String city; // City like Jaipur, Mumbai, etc.
+    
     private String designation;
     
     private String profilePictureUrl;
-    
+
+    /**
+     * GeoJSON polygon string defining the ward boundary for geo-fencing.
+     * Example: {"type":"Polygon","coordinates":[[[lon,lat],...]]}
+     */
+    @Column(columnDefinition = "TEXT")
+    private String geoFence;
+
     @Column(nullable = false)
     private Boolean active = true;
     

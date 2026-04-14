@@ -36,12 +36,41 @@ public class LeaderService {
     public List<Leader> getLeadersByJurisdiction(String jurisdiction) {
         return leaderRepository.findByJurisdiction(jurisdiction);
     }
+
+    public List<Leader> getLeadersByCity(String state, String city) {
+        return leaderRepository.findByStateAndCityAndActiveTrue(state, city);
+    }
     
     @Transactional
     public Leader createLeader(Leader leader) {
         leader.setActive(true);
         Leader savedLeader = leaderRepository.save(leader);
         log.info("Leader created: {} ({})", savedLeader.getName(), savedLeader.getJurisdiction());
+        return savedLeader;
+    }
+    
+    @Transactional
+    public Leader registerLeaderBySuperAdmin(String name, String phone, String email, String jurisdiction, String designation) {
+        // Check if leader already exists
+        if (leaderRepository.existsByPhone(phone)) {
+            throw new RuntimeException("Leader with this phone number already exists");
+        }
+        
+        if (email != null && leaderRepository.existsByEmail(email)) {
+            throw new RuntimeException("Leader with this email already exists");
+        }
+        
+        Leader leader = new Leader();
+        leader.setName(name);
+        leader.setPhone(phone);
+        leader.setEmail(email);
+        leader.setJurisdiction(jurisdiction);
+        leader.setDesignation(designation);
+        leader.setActive(true);
+        
+        Leader savedLeader = leaderRepository.save(leader);
+        log.info("Leader registered by super admin: {} ({})", savedLeader.getName(), savedLeader.getJurisdiction());
+        
         return savedLeader;
     }
     

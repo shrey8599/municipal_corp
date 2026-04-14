@@ -23,4 +23,12 @@ public class UserRegistrationDTO {
     private String wardNumber;
     
     private Long leaderId; // Associated leader ID
+
+    private String state;
+
+    private String city;
+
+    private Double latitude;
+
+    private Double longitude;
 }

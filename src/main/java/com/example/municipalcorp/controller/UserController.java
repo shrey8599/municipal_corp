@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,6 +22,13 @@ public class UserController {
     
     private final UserService userService;
     private final LeaderService leaderService;
+    
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
+        log.info("Get all users");
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(ApiResponse.success("Users retrieved successfully", users));
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<User>> getUserById(@PathVariable Long id) {

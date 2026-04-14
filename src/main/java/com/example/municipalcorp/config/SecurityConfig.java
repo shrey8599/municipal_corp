@@ -39,17 +39,21 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers("/", "/index.html", "/api/hello", "/api/health").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/send-otp", "/api/auth/verify-otp", "/api/auth/register").permitAll()
                 .requestMatchers("/api/leaders/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers("/api/news", "/api/news/**").permitAll() // Allow news reading for all
+                .requestMatchers("/api/region").permitAll() // Region settings readable by all
                 
                 // Static resources (HTML, CSS, JS, images, favicon)
                 .requestMatchers("/*.html", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 
                 // Swagger/OpenAPI endpoints
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                
+                // Super admin endpoints - require authentication
+                .requestMatchers("/api/auth/super-admin/**").authenticated()
                 
                 // User endpoints - require authentication
                 .requestMatchers("/api/users/**").authenticated()

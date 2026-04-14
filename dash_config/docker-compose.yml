@@ -1,4 +1,25 @@
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: municipal-corp-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: municipal_corp
+      MYSQL_USER: shrey8599
+      MYSQL_PASSWORD: "BEAMER@123beamer"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "shrey8599", "-pBEAMER@123beamer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - municipal-network
+
   municipal-corp:
     build:
       context: ..
@@ -9,9 +30,18 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - JAVA_OPTS=-Xmx512m -Xms256m
+      - MYSQL_URL=jdbc:mysql://mysql:3306/municipal_corp?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - MYSQL_USER=shrey8599
+      - MYSQL_PASSWORD=BEAMER@123beamer
+    depends_on:
+      mysql:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - municipal-network
+
+volumes:
+  mysql-data:
 
 networks:
   municipal-network:

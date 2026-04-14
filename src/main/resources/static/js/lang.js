@@ -305,7 +305,104 @@ const translations = {
         
         // Contact Officer Page
         'contact.leaderInfo': 'Ward Officer Information',
-        'contact.leaderNote': 'Your ward officer is here to help resolve complaints and issues in your area. Feel free to reach out for any assistance or updates on your complaints.'
+        'contact.leaderNote': 'Your ward officer is here to help resolve complaints and issues in your area. Feel free to reach out for any assistance or updates on your complaints.',
+
+        // Super Admin Panel
+        'superAdmin.role': 'Administrator',
+        'superAdmin.navDashboard': '📊 Dashboard',
+        'superAdmin.navWardOfficers': '👥 Ward Officers',
+        'superAdmin.navAnalytics': '📈 Analytics',
+        'superAdmin.navCityNews': '📰 City News',
+        'superAdmin.navSettings': '⚙️ Settings',
+        'superAdmin.logout': 'Logout',
+        'superAdmin.language': 'Language',
+
+        // Dashboard page
+        'superAdmin.dashboardTitle': '📊 Dashboard Overview',
+        'superAdmin.totalOfficers': 'Total Ward Officers',
+        'superAdmin.totalCitizens': 'Total Citizens',
+        'superAdmin.totalTickets': 'Total Tickets',
+        'superAdmin.openTickets': 'Open Tickets',
+        'superAdmin.recentOfficers': 'Recent Ward Officers',
+        'superAdmin.loading': 'Loading...',
+
+        // Ward Officers page
+        'superAdmin.wardOfficersTitle': '👥 Ward Officers Management',
+        'superAdmin.createOfficerBtn': '+ Create New Ward Officer',
+        'superAdmin.colName': 'Name',
+        'superAdmin.colPhone': 'Phone',
+        'superAdmin.colEmail': 'Email',
+        'superAdmin.colWard': 'Ward Number',
+        'superAdmin.colDesignation': 'Designation',
+        'superAdmin.colStatus': 'Status',
+        'superAdmin.colActions': 'Actions',
+
+        // Analytics page
+        'superAdmin.analyticsTitle': '📈 Analytics',
+        'superAdmin.filterByOfficer': 'Filter by Ward Officer:',
+        'superAdmin.allOfficers': 'All Ward Officers',
+        'superAdmin.resolvedTickets': 'Resolved Tickets',
+        'superAdmin.inProgress': 'In Progress',
+        'superAdmin.resolutionRate': 'Resolution Rate',
+        'superAdmin.avgResolutionTime': 'Avg Resolution Time',
+        'superAdmin.officersInCity': 'Ward Officers in City',
+        'superAdmin.closedTickets': 'Closed Tickets',
+        'superAdmin.chartByStatus': 'Tickets by Status',
+        'superAdmin.chartByCategory': 'Tickets by Category',
+        'superAdmin.chartByType': 'Tickets by Type',
+        'superAdmin.officerPerformance': 'Ward Officer Performance',
+        'superAdmin.colOfficer': 'Officer',
+        'superAdmin.colTotal': 'Total',
+        'superAdmin.colResolved': 'Resolved',
+        'superAdmin.colInProgress': 'In Progress',
+        'superAdmin.colOpen': 'Open',
+        'superAdmin.colResolutionRate': 'Resolution Rate',
+        'superAdmin.ticketSummary': 'Ticket Summary by Status',
+        'superAdmin.colCount': 'Count',
+        'superAdmin.colPercentage': 'Percentage',
+
+        // City News page
+        'superAdmin.cityNewsTitle': '📰 City News',
+        'superAdmin.newsFilterByOfficer': 'Filter by Ward Officer:',
+        'superAdmin.loadingNews': 'Loading news...',
+
+        // Settings page
+        'superAdmin.settingsTitle': '⚙️ Settings',
+        'superAdmin.systemSettings': 'System Settings',
+        'superAdmin.corpName': 'Municipal Corporation Name *',
+        'superAdmin.corpNamePlaceholder': 'Enter corporation name',
+        'superAdmin.state': 'State *',
+        'superAdmin.selectState': 'Select State',
+        'superAdmin.city': 'City/Area *',
+        'superAdmin.selectCity': 'Select City',
+        'superAdmin.contactEmail': 'Contact Email',
+        'superAdmin.contactPhone': 'Contact Phone',
+        'superAdmin.photosTitle': '🏛️ Political Representative Photos',
+        'superAdmin.photosDesc': 'These photos are displayed on citizen and ward officer dashboards in a hierarchical banner.',
+        'superAdmin.saveSettings': 'Save Settings',
+        'superAdmin.pmPhoto': 'Prime Minister Photo',
+        'superAdmin.cmPhoto': 'Chief Minister Photo',
+        'superAdmin.mlaPhoto': 'MLA / MP Photo',
+
+        // Create Officer Modal
+        'superAdmin.createOfficerTitle': 'Create New Ward Officer',
+        'superAdmin.verifyPhoneNote': "Enter the ward officer's phone number to verify it via OTP before creating the account.",
+        'superAdmin.phonePlaceholder': '10-digit phone number',
+        'superAdmin.sendOtp': 'Send OTP',
+        'superAdmin.resendOtp': 'Resend OTP',
+        'superAdmin.enterOtp': 'Enter OTP *',
+        'superAdmin.otpPlaceholder': '6-digit OTP',
+        'superAdmin.verifyOtp': 'Verify OTP',
+        'superAdmin.officerName': 'Name *',
+        'superAdmin.officerEmail': 'Email',
+        'superAdmin.officerWard': 'Ward Number *',
+        'superAdmin.officerDesignation': 'Designation',
+        'superAdmin.createOfficer': 'Create Officer',
+        'superAdmin.cancel': 'Cancel',
+
+        // Edit Officer Modal
+        'superAdmin.editOfficerTitle': 'Edit Ward Officer',
+        'superAdmin.saveChanges': 'Save Changes'
     },
     hi: {
         // Navigation & Header
@@ -610,7 +707,104 @@ const translations = {
         
         // Contact Officer Page
         'contact.leaderInfo': 'वार्ड अधिकारी की जानकारी',
-        'contact.leaderNote': 'आपका वार्ड अधिकारी आपके क्षेत्र में शिकायतों और समस्याओं को हल करने में मदद के लिए यहाँ है। आपकी शिकायतों पर सहायता या अपडेट के लिए बेझिझक संपर्क करें।'
+        'contact.leaderNote': 'आपका वार्ड अधिकारी आपके क्षेत्र में शिकायतों और समस्याओं को हल करने में मदद के लिए यहाँ है। आपकी शिकायतों पर सहायता या अपडेट के लिए बेझिझक संपर्क करें।',
+
+        // Super Admin Panel
+        'superAdmin.role': 'प्रशासक',
+        'superAdmin.navDashboard': '📊 डैशबोर्ड',
+        'superAdmin.navWardOfficers': '👥 वार्ड अधिकारी',
+        'superAdmin.navAnalytics': '📈 विश्लेषण',
+        'superAdmin.navCityNews': '📰 शहर समाचार',
+        'superAdmin.navSettings': '⚙️ सेटिंग्स',
+        'superAdmin.logout': 'लॉगआउट',
+        'superAdmin.language': 'भाषा',
+
+        // Dashboard page
+        'superAdmin.dashboardTitle': '📊 डैशबोर्ड अवलोकन',
+        'superAdmin.totalOfficers': 'कुल वार्ड अधिकारी',
+        'superAdmin.totalCitizens': 'कुल नागरिक',
+        'superAdmin.totalTickets': 'कुल टिकटें',
+        'superAdmin.openTickets': 'खुली टिकटें',
+        'superAdmin.recentOfficers': 'हाल के वार्ड अधिकारी',
+        'superAdmin.loading': 'लोड हो रहा है...',
+
+        // Ward Officers page
+        'superAdmin.wardOfficersTitle': '👥 वार्ड अधिकारी प्रबंधन',
+        'superAdmin.createOfficerBtn': '+ नए वार्ड अधिकारी बनाएं',
+        'superAdmin.colName': 'नाम',
+        'superAdmin.colPhone': 'फोन',
+        'superAdmin.colEmail': 'ईमेल',
+        'superAdmin.colWard': 'वार्ड नंबर',
+        'superAdmin.colDesignation': 'पद',
+        'superAdmin.colStatus': 'स्थिति',
+        'superAdmin.colActions': 'कार्रवाई',
+
+        // Analytics page
+        'superAdmin.analyticsTitle': '📈 विश्लेषण',
+        'superAdmin.filterByOfficer': 'वार्ड अधिकारी द्वारा फ़िल्टर करें:',
+        'superAdmin.allOfficers': 'सभी वार्ड अधिकारी',
+        'superAdmin.resolvedTickets': 'हल की गई टिकटें',
+        'superAdmin.inProgress': 'प्रक्रियाधीन',
+        'superAdmin.resolutionRate': 'समाधान दर',
+        'superAdmin.avgResolutionTime': 'औसत समाधान समय',
+        'superAdmin.officersInCity': 'शहर में वार्ड अधिकारी',
+        'superAdmin.closedTickets': 'बंद टिकटें',
+        'superAdmin.chartByStatus': 'स्थिति अनुसार टिकटें',
+        'superAdmin.chartByCategory': 'श्रेणी अनुसार टिकटें',
+        'superAdmin.chartByType': 'प्रकार अनुसार टिकटें',
+        'superAdmin.officerPerformance': 'वार्ड अधिकारी प्रदर्शन',
+        'superAdmin.colOfficer': 'अधिकारी',
+        'superAdmin.colTotal': 'कुल',
+        'superAdmin.colResolved': 'हल किए गए',
+        'superAdmin.colInProgress': 'प्रक्रियाधीन',
+        'superAdmin.colOpen': 'खुले',
+        'superAdmin.colResolutionRate': 'समाधान दर',
+        'superAdmin.ticketSummary': 'स्थिति अनुसार टिकट सारांश',
+        'superAdmin.colCount': 'संख्या',
+        'superAdmin.colPercentage': 'प्रतिशत',
+
+        // City News page
+        'superAdmin.cityNewsTitle': '📰 शहर समाचार',
+        'superAdmin.newsFilterByOfficer': 'वार्ड अधिकारी द्वारा फ़िल्टर करें:',
+        'superAdmin.loadingNews': 'समाचार लोड हो रहा है...',
+
+        // Settings page
+        'superAdmin.settingsTitle': '⚙️ सेटिंग्स',
+        'superAdmin.systemSettings': 'सिस्टम सेटिंग्स',
+        'superAdmin.corpName': 'नगर निगम का नाम *',
+        'superAdmin.corpNamePlaceholder': 'निगम का नाम दर्ज करें',
+        'superAdmin.state': 'राज्य *',
+        'superAdmin.selectState': 'राज्य चुनें',
+        'superAdmin.city': 'शहर/क्षेत्र *',
+        'superAdmin.selectCity': 'शहर चुनें',
+        'superAdmin.contactEmail': 'संपर्क ईमेल',
+        'superAdmin.contactPhone': 'संपर्क फोन',
+        'superAdmin.photosTitle': '🏛️ राजनीतिक प्रतिनिधि फ़ोटो',
+        'superAdmin.photosDesc': 'ये फ़ोटो नागरिक और वार्ड अधिकारी डैशबोर्ड पर एक बैनर में दिखाई जाती हैं।',
+        'superAdmin.saveSettings': 'सेटिंग्स सहेजें',
+        'superAdmin.pmPhoto': 'प्रधानमंत्री फ़ोटो',
+        'superAdmin.cmPhoto': 'मुख्यमंत्री फ़ोटो',
+        'superAdmin.mlaPhoto': 'विधायक / सांसद फ़ोटो',
+
+        // Create Officer Modal
+        'superAdmin.createOfficerTitle': 'नए वार्ड अधिकारी बनाएं',
+        'superAdmin.verifyPhoneNote': 'खाता बनाने से पहले OTP के माध्यम से वार्ड अधिकारी का फोन नंबर सत्यापित करें।',
+        'superAdmin.phonePlaceholder': '10 अंकीय फोन नंबर',
+        'superAdmin.sendOtp': 'OTP भेजें',
+        'superAdmin.resendOtp': 'OTP पुनः भेजें',
+        'superAdmin.enterOtp': 'OTP दर्ज करें *',
+        'superAdmin.otpPlaceholder': '6 अंकीय OTP',
+        'superAdmin.verifyOtp': 'OTP सत्यापित करें',
+        'superAdmin.officerName': 'नाम *',
+        'superAdmin.officerEmail': 'ईमेल',
+        'superAdmin.officerWard': 'वार्ड नंबर *',
+        'superAdmin.officerDesignation': 'पद',
+        'superAdmin.createOfficer': 'अधिकारी बनाएं',
+        'superAdmin.cancel': 'रद्द करें',
+
+        // Edit Officer Modal
+        'superAdmin.editOfficerTitle': 'वार्ड अधिकारी संपादित करें',
+        'superAdmin.saveChanges': 'परिवर्तन सहेजें'
     }
 };
 
@@ -694,6 +888,17 @@ function setLanguage(lang) {
             loadContactPage();
         } catch (e) {
             console.error('Error in loadContactPage:', e);
+        }
+    }
+
+    // If we're on the super admin panel, re-apply translations
+    // (data-i18n already handled by applyPageTranslations above; this also updates
+    // dynamically-set labeltext in the language toggle itself)
+    if (typeof loadDashboardData === 'function' && document.getElementById('adminName')) {
+        try {
+            applyPageTranslations();
+        } catch (e) {
+            console.error('Error re-applying super admin translations:', e);
         }
     }
 }

@@ -36,13 +36,18 @@ public class TicketController {
     }
     
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TicketResponseDTO>>> getUserTickets(
-            @RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<List<TicketResponseDTO>>> getTickets(
+            @RequestParam(required = false) Long userId) {
         
-        log.info("Fetching tickets for user: {}", userId);
-        List<TicketResponseDTO> tickets = ticketService.getCitizenTickets(userId);
-        
-        return ResponseEntity.ok(ApiResponse.success("Tickets retrieved successfully", tickets));
+        if (userId != null) {
+            log.info("Fetching tickets for user: {}", userId);
+            List<TicketResponseDTO> tickets = ticketService.getCitizenTickets(userId);
+            return ResponseEntity.ok(ApiResponse.success("Tickets retrieved successfully", tickets));
+        } else {
+            log.info("Fetching all tickets");
+            List<TicketResponseDTO> tickets = ticketService.getAllTickets();
+            return ResponseEntity.ok(ApiResponse.success("Tickets retrieved successfully", tickets));
+        }
     }
     
     @GetMapping("/{id}")

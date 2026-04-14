@@ -45,6 +45,14 @@ public class User {
     
     private String wardNumber;
     
+    private String state; // State for filtering by region
+    
+    private String city; // City for filtering by region
+
+    private Double latitude; // Geo-coordinate
+
+    private Double longitude; // Geo-coordinate
+    
     private String profilePictureUrl;
     
     @ManyToOne(fetch = FetchType.EAGER)
@@ -68,6 +76,7 @@ public class User {
     
     public enum UserRole {
         CITIZEN,
-        ADMIN
+        ADMIN,
+        SUPER_ADMIN
     }
 }

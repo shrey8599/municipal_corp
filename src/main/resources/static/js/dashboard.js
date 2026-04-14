@@ -153,12 +153,59 @@ function displayLeaderProfile(leader) {
     const visionStatement = document.querySelector('.vision-statement');
     if (visionStatement) {
         if (currentUser && currentUser.role === 'LEADER') {
-            // Hide vision statement for leaders
             visionStatement.style.display = 'none';
         } else {
-            // Show vision statement for citizens
             visionStatement.style.display = 'block';
         }
+    }
+
+    // Load political figure images from system settings
+    loadPoliticalFigures();
+}
+
+// Fetch region settings and populate PM/CM/MLA sticker images based on the leader's city
+async function loadPoliticalFigures() {
+    try {
+        const state = currentLeader ? currentLeader.state : null;
+        const city  = currentLeader ? currentLeader.city  : null;
+        if (!state || !city) return;
+        const response = await fetch(
+            `/api/region?state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`,
+            { cache: 'no-store' }
+        );
+        const result = await response.json();
+        if (!result.success || !result.data) return;
+        const s = result.data;
+
+        const corner = document.getElementById('figuresCorner');
+        let anyVisible = false;
+
+        if (s.pmImageUrl) {
+            const el = document.getElementById('pmPicDisplay');
+            el.src = s.pmImageUrl;
+            el.style.display = 'block';
+            anyVisible = true;
+        }
+
+        if (s.cmImageUrl) {
+            const el = document.getElementById('cmPicDisplay');
+            el.src = s.cmImageUrl;
+            el.style.display = 'block';
+            anyVisible = true;
+        }
+
+        if (s.mlaImageUrl) {
+            const el = document.getElementById('mlaPicDisplay');
+            el.src = s.mlaImageUrl;
+            el.style.display = 'block';
+            anyVisible = true;
+        }
+
+        if (corner && anyVisible) {
+            corner.style.display = 'flex';
+        }
+    } catch (err) {
+        console.error('Failed to load political figures:', err);
     }
 }
 
@@ -467,7 +514,7 @@ async function submitNews(event) {
             if (result.success) {
                 showAlert('News published successfully!', 'success');
                 closeAddNewsModal();
-                await loadNews();
+                await loadLeaderNews(currentUser.id);
             }
         } else {
             showAlert('Failed to publish news', 'error');
@@ -494,7 +541,7 @@ async function deleteNews(newsId) {
         
         if (response.ok) {
             showAlert('News deleted successfully', 'success');
-            await loadNews();
+            await loadLeaderNews(currentUser.id);
         } else {
             showAlert('Failed to delete news', 'error');
         }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,6 +40,10 @@ public class UserService {
         user.setWardNumber(dto.getWardNumber());
         user.setRole(User.UserRole.CITIZEN);
         user.setActive(true);
+        user.setState(dto.getState());
+        user.setCity(dto.getCity());
+        user.setLatitude(dto.getLatitude());
+        user.setLongitude(dto.getLongitude());
         
         // Associate with leader if provided
         if (dto.getLeaderId() != null) {
@@ -108,6 +113,10 @@ public class UserService {
         return identifier.contains("@")
             ? userRepository.existsByEmail(identifier)
             : userRepository.existsByPhone(identifier);
+    }
+    
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
     
     @Transactional

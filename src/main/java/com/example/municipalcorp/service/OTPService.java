@@ -32,10 +32,13 @@ public class OTPService {
         otpVerification.setExpiresAt(LocalDateTime.now().plusMinutes(OTP_EXPIRY_MINUTES));
         
         otpRepository.save(otpVerification);
+        log.info("✅ OTP generated and saved for {}: {} (expires in {} minutes)", identifier, otp, OTP_EXPIRY_MINUTES);
         
         // In production, integrate with SMS/Email service
         // For development, log the OTP
-        log.info("OTP for {}: {}", identifier, otp);
+        log.info("📱 OTP for {}: {}", identifier, otp);
+        log.debug("🔐 OTP Details - Identifier: {}, OTP: {}, Expiry: {} minutes", 
+            identifier, otp, OTP_EXPIRY_MINUTES);
         
         // Mock sending OTP
         sendOTP(identifier, otp);
