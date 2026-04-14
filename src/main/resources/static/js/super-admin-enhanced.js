@@ -924,8 +924,8 @@ async function previewAndUploadSettingsImage(inputId, previewId, settingKey, sco
     }
 
     try {
-        // Compress to max 400×500 at JPEG 70% — keeps file small enough for DB storage
-        const base64Url = await compressImageToBase64(input.files[0], 400, 500, 0.7);
+        // Compress to max 250×312 at JPEG 65% — keeps base64 small enough for reliable DB storage (~15-25KB)
+        const base64Url = await compressImageToBase64(input.files[0], 250, 312, 0.65);
 
         // Show preview
         if (preview) {
@@ -975,19 +975,19 @@ Do you want to continue?`
 }
 
 // Save settings
-function saveSettings() {
+async function saveSettings() {
     const corporationName = document.getElementById('corporationName').value;
     const selectedState = document.getElementById('stateSelect').value;
     const selectedCity = document.getElementById('citySelect').value;
     const contactEmail = document.getElementById('contactEmail').value;
     const contactPhone = document.getElementById('contactPhone').value;
-    
+
     // Validate required fields
     if (!corporationName || !selectedState || !selectedCity) {
         showAlert('settingsAlert', '⚠ Please fill in all required fields (Corporation Name, State, City)', 'error');
         return;
     }
-    
+
     const settings = {
         corporationName: corporationName,
         state: selectedState,
@@ -995,7 +995,7 @@ function saveSettings() {
         contactEmail: contactEmail,
         contactPhone: contactPhone
     };
-    
+
     // Save to localStorage
     localStorage.setItem('systemSettings', JSON.stringify(settings));
 
@@ -1005,22 +1005,37 @@ function saveSettings() {
         currentAdmin.city = selectedCity;
     }
 
-    showAlert('settingsAlert', '✓ Settings saved successfully. Reloading data for ' + selectedCity + '...', 'success');
+    showAlert('settingsAlert', '⏳ Saving settings...', 'success');
 
-    // Persist political figure image URLs to backend (PM/CM auto-propagated server-side)
+    // Persist political figure image URLs to backend
     const imagePayload = {
         pmImageUrl: settingImageUrls.pmImageUrl || null,
         cmImageUrl: settingImageUrls.cmImageUrl || null,
         mlaImageUrl: settingImageUrls.mlaImageUrl || null
     };
-    fetch(`${API_BASE}/region?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwtToken}`
-        },
-        body: JSON.stringify(imagePayload)
-    }).catch(err => console.error('Failed to persist region image settings:', err));
+
+    try {
+        const resp = await fetch(
+            `${API_BASE}/region?state=${encodeURIComponent(selectedState)}&city=${encodeURIComponent(selectedCity)}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+                body: JSON.stringify(imagePayload)
+            }
+        );
+        const result = await resp.json();
+        if (result.success) {
+            showAlert('settingsAlert', '✓ Settings saved successfully for ' + selectedCity + '.', 'success');
+        } else {
+            showAlert('settingsAlert', '⚠ Settings saved locally but image save failed: ' + (result.message || 'Server error'), 'error');
+        }
+    } catch (err) {
+        console.error('Failed to persist region image settings:', err);
+        showAlert('settingsAlert', '⚠ Settings saved locally but server error: ' + err.message, 'error');
+    }
 
     // Reload data for the currently visible page with the new city
     const activePage = document.querySelector('.page.active');

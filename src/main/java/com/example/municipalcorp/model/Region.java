@@ -39,17 +39,17 @@ public class Region {
 
     // MP / MLA — city-specific
     private String mlaName;
-    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String mlaImageUrl;
 
     // Chief Minister — state-level (auto-propagated to all cities in same state on save)
     private String cmName;
-    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String cmImageUrl;
 
     // Prime Minister — national (auto-propagated to all regions on save)
     private String pmName;
-    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String pmImageUrl;
 
     @UpdateTimestamp
