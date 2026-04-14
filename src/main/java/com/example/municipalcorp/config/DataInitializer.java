@@ -6,7 +6,6 @@ import com.example.municipalcorp.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -22,23 +21,10 @@ public class DataInitializer implements CommandLineRunner {
     private final TicketRepository ticketRepository;
     private final OTPVerificationRepository otpRepository;
     private final RegionRepository regionRepository;
-    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public void run(String... args) {
-        log.info("🔄 Checking test data...");
-
-        // Guarantee region image columns are LONGTEXT (ddl-auto=update may not ALTER existing VARCHAR columns)
-        try {
-            jdbcTemplate.execute("ALTER TABLE region MODIFY COLUMN mla_image_url LONGTEXT");
-            jdbcTemplate.execute("ALTER TABLE region MODIFY COLUMN cm_image_url LONGTEXT");
-            jdbcTemplate.execute("ALTER TABLE region MODIFY COLUMN pm_image_url LONGTEXT");
-            log.info("✅ Region image columns are LONGTEXT");
-        } catch (Exception e) {
-            log.warn("⚠️ Could not alter region image columns (table may not exist yet): {}", e.getMessage());
-        }
-
-        try {
+        log.info("🔄 Checking test data...");        try {
             // Create Leaders only if they don't already exist (idempotent)
             Leader leader1 = leaderRepository.findByPhone("1111111111").orElseGet(() -> createLeader(
                 "1111111111",
